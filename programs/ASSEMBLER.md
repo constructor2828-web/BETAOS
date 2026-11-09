@@ -1,64 +1,66 @@
-# Ensamblador integrado de BETAOS
+# BETAOS integrated assembler
 
-F6 abre el editor. El ejemplo inicial está listo para ejecutarse con **Ctrl-R**.
-Ctrl-S guarda el archivo actual; Ctrl-Z/Ctrl-Y deshacen y rehacen hasta 16 cambios.
-Las flechas mantienen la columna al cambiar de linea; Inicio/Fin actuan sobre la
-linea y Ctrl-Inicio/Ctrl-Fin sobre el documento. Antes de perder cambios sin guardar
-puedes guardarlos, descartarlos o cancelar.
+F6 opens the editor. The initial example is ready to run with **Ctrl-R**.
+Ctrl-S saves; Ctrl-Z/Ctrl-Y undo and redo up to 16 changes. Arrows preserve the
+column when moving vertically. Home/End act on the line, Ctrl-Home/Ctrl-End on
+the document. Before losing unsaved changes, you can save, discard or cancel.
+Ctrl-F searches; Enter finds the next match and Esc returns to editing. Clicking
+positions the cursor, and Enter preserves indentation.
 
-Ctrl-B ensambla e instala el programa `scratch`.
-El archivo puede crearse desde el menú contextual del escritorio y abrirse con
-doble clic. También puedes usar `edit archivo.asm`, seguido de `asm archivo.asm app`.
+Ctrl-B assembles and installs using the filename without its extension, such as
+`scratch` for `scratch.asm`. Create a file from the desktop context menu and
+double-click it to edit. You can also enter `edit example.asm`, then
+`asm example.asm app` in Terminal.
 
-El ensamblador y el cargador funcionan dentro de BETAOS. No necesitan GCC, NASM,
-Python, Linux ni otro compilador externo en el SO.
+The assembler and loader run inside BETAOS. They do not need GCC, NASM, Python,
+Linux or another external compiler inside the OS.
 
 ```asm
-; Hola mundo nativo, sintaxis Intel
+; Native hello world, Intel syntax
 bits 64
 start:
     push rbx
     mov rbx, rdi
-    lea rdi, [rel mensaje]
+    lea rdi, [rel message]
     call [rbx+8]
     pop rbx
     ret
-mensaje: db "Hola desde ASM!", 10, 0
+message: db "Hello from ASM!", 10, 0
 ```
 
-El resultado es un ejecutable BEX v1. `start` es la entrada si existe; si no, la
-entrada es el primer byte del payload. Los datos y las instrucciones comparten
-el mismo bloque; utiliza etiquetas y RIP relativo para referenciar cadenas.
+The result is a BEX v1 executable. `start` is the entry point if present; otherwise
+the first payload byte is used. Code and data share one block. Use labels and
+RIP-relative addressing for strings.
 
-## Subconjunto implementado
+## Implemented subset
 
-- Registros `rax rcx rdx rbx rsp rbp rsi rdi r8` a `r15`.
-- `mov REG, REG` y `mov REG, INMEDIATO` de 64 bits.
-- `add`, `sub`, `cmp` entre registros o con inmediato de 32 bits con signo.
+- Registers `rax rcx rdx rbx rsp rbp rsi rdi r8` through `r15`.
+- 64-bit `mov REG, REG` and `mov REG, IMMEDIATE`.
+- `add`, `sub`, `cmp` between registers or with a signed 32-bit immediate.
 - `xor REG, REG`, `inc REG`, `dec REG`, `push REG`, `pop REG`, `nop`, `ret`.
-- `lea REG, [rel etiqueta]`.
-- `jmp`, `jnz`, `jz`, `call` a etiquetas, con desplazamiento relativo de 32 bits.
-- `call [rbx+8]`: imprimir cadena NUL terminada (`rdi` apunta al texto).
-- `call [rbx+16]`: imprimir entero decimal de 64 bits (`rdi` contiene el valor).
-- `call [rbx+24]`: obtener MiB disponibles al arrancar (`rax` recibe el resultado).
-- `db` con números decimales/hexadecimales y cadenas, separados por comas.
-  Cadenas con `\n`, `\r`, `\t`, comillas escapadas y barras invertidas.
-- `bits 64`, comentarios `;`, etiquetas y números negativos; hexadecimal `0x...`.
+- `lea REG, [rel label]`.
+- `jmp`, `jnz`, `jz`, `call` to labels, using signed 32-bit relative offsets.
+- `call [rbx+8]`: print a NUL-terminated string (`rdi` points to the text).
+- `call [rbx+16]`: print an unsigned 64-bit decimal integer (value in `rdi`).
+- `call [rbx+24]`: return boot-time available RAM in MiB in `rax`.
+- `db` with comma-separated decimal/hexadecimal numbers and strings. Strings
+  support `\n`, `\r`, `\t`, escaped quotes and backslashes.
+- `bits 64`, `;` comments, labels, negative numbers and `0x...` hexadecimal.
 
-No hay macros, includes, secciones, expresiones aritméticas, registros de otros
-anchos, instrucciones SIMD ni sintaxis NASM completa. Mantén `rel` en minúsculas.
-Se admiten 128 etiquetas, 128 referencias y líneas de menos de 512 caracteres.
-El editor tiene 8191 bytes y el payload ejecutable no puede superar 65536 bytes.
+There are no macros, includes, sections, arithmetic expressions, other register
+widths, SIMD instructions or full NASM syntax. Keep `rel` lowercase. Limits are
+128 labels, 128 references and lines shorter than 512 characters. The editor
+holds 8191 bytes; executable payloads cannot exceed 65536 bytes.
 
 ## ABI
 
-Al entrar, `rdi` apunta a la tabla de API descrita en [README.md](README.md).
-`rbx`, `rbp`, `r12`–`r15` deben conservarse. Alinea la pila a 16 bytes antes de
-llamar a una función. Una forma sencilla para el ejemplo es `push rbx` al entrar
-y `pop rbx` antes de `ret`. Los callbacks pueden modificar registros temporales;
-guarda la tabla en un registro preservado.
+On entry, `rdi` points to the API table described in [README.md](README.md).
+Preserve `rbx`, `rbp`, `r12`–`r15`. Align the stack to 16 bytes before calling a
+function; the example uses `push rbx` on entry and `pop rbx` before `ret`.
+Callbacks may change temporary registers, so keep the API table pointer in a
+preserved register.
 
-Los programas se ejecutan directamente en modo kernel, sin aislamiento ni límite
-de tiempo. Un bucle infinito, un retorno incorrecto o un acceso inválido puede
-bloquear el SO. Las apps instaladas y el código fuente guardado se conservan en
-un disco BETA instalado; sin él, solo viven en RAM.
+Programs run directly in kernel mode without isolation or a time limit. An
+infinite loop, invalid return or invalid memory access can stop the OS. Installed
+apps and saved source files persist on an installed BETA disk; otherwise they
+remain in RAM only.

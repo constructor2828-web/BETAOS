@@ -1,133 +1,126 @@
 # BETAOS 0.8
 
-Sistema operativo independiente x86-64, escrito en **C y ensamblador**. No utiliza
-Linux, una distribución ni un sistema anfitrión dentro del SO. Incluye soporte C
-freestanding propio y bibliotecas C embebidas para fuentes, TLS y JavaScript. Las herramientas
-de compilación y Python se ejecutan únicamente en la máquina de desarrollo.
+An independent x86-64 operating system written in **C and assembly**. It does not
+use Linux, a distribution, or a host operating system inside the OS. It includes
+its own freestanding C support and embedded C libraries for fonts, TLS and
+JavaScript. Build tools and Python run only on the development machine.
 
-Es un prototipo funcional: arranca por UEFI, ofrece escritorio gráfico, ejecuta
-programas ASM nativos y puede instalarse en un disco SATA compatible. Las pruebas
-se realizan en QEMU; el hardware físico no se ha validado.
+This is a working prototype: it boots through UEFI, provides a graphical desktop,
+runs native ASM programs and can install to a compatible SATA disk. Testing uses
+QEMU; physical hardware has not been validated.
 
-## Editor y aplicaciones USB
+## Editor and USB applications
 
-El editor permite buscar con Ctrl-F, colocar el cursor con el ratón y mantener
-la sangría al pulsar Enter. Ctrl-B compila con el nombre del archivo; Ctrl-R
-compila y ejecuta. El [App Kit](docs/APPKIT.md) crea aplicaciones BEX en el equipo
-de desarrollo para copiarlas a un USB FAT16/FAT32 e instalarlas en BETAOS.
+The editor supports Ctrl-F search, mouse cursor placement and automatic indentation
+on Enter. Ctrl-B builds under the file's name; Ctrl-R builds and runs it. The
+[App Kit](docs/APPKIT.md) creates BEX applications on the development machine for
+copying to a FAT16/FAT32 USB drive and installing in BETAOS.
 
-El navegador ejecuta JavaScript con QuickJS. Se han corregido dependencias entre
-scripts externos e internos, `defer`, `window.onload` y el orden de las hojas CSS.
-La compatibilidad sigue siendo parcial; [WEB.md](docs/WEB.md) detalla los límites.
+The browser runs JavaScript through QuickJS. External/inline script dependencies,
+`defer`, `window.onload` and stylesheet ordering have been corrected. Web support
+remains partial; [WEB.md](docs/WEB.md) describes its limits.
 
-## Compilar y arrancar
+## Build and boot
 
-Requisitos: GCC, GNU binutils con `i386pep`, GNU Make, Python 3 y mkisofs/genisoimage
-con soporte EFI El Torito. Para ejecutar: QEMU x86-64 y OVMF.
+Requirements: GCC, GNU binutils with `i386pep`, GNU Make, Python 3, and
+mkisofs/genisoimage with EFI El Torito support. Running requires QEMU x86-64 and OVMF.
 
 ```sh
-make                  # build/BETAOS64.iso + SHA-256
-make run              # ISO y disco virtual persistente de 128 MiB
-make run-installed    # arrancar solo desde ese disco, después de instalar
+make                  # build/BETAOS64.iso and SHA-256
+make run              # ISO and a persistent 128 MiB virtual disk
+make run-installed    # boot only from that disk after installation
 ```
 
-El disco de uso personal está en `disks/BETAOS.img` y **sobrevive a `make clean`**.
-El primer comando `make run` lo crea si no existe; no sobrescribe uno existente.
-Los discos de pruebas están en `build/` y son desechables.
+The personal disk is `disks/BETAOS.img` and **survives `make clean`**. `make run`
+creates it if missing and does not overwrite an existing disk. Disposable test
+disks live in `build/`.
 
-Por defecto se utiliza `/usr/share/OVMF/x64/OVMF.4m.fd`. Puedes cambiarlo mediante
-`make run OVMF=/ruta/OVMF.fd`. Este archivo es la imagen OVMF combinada; las
-instalaciones con archivos CODE/VARS separados requieren las opciones pflash de
-QEMU. Para las pruebas, `OVMF=/ruta/OVMF.fd` es una variable de entorno.
+The default firmware is `/usr/share/OVMF/x64/OVMF.4m.fd`. Override it with
+`make run OVMF=/path/to/OVMF.fd`. This is the combined OVMF image; installations
+with separate CODE/VARS files require QEMU pflash options. For tests,
+`OVMF=/path/to/OVMF.fd` is an environment variable.
 
-## Escritorio
+## Desktop
 
-El indicador `us` de la barra cambia la distribucion del teclado al pulsarlo.
-Tambien puedes usar `Ctrl-Alt-Espacio` o `keymap es` en la terminal. Se incluyen
-`us`, `es`, `de` y `fr`; el ajuste se guarda si hay un disco BETA instalado.
-El mapa espanol incluye la enie y AltGr para los simbolos de programacion.
-El texto interno es Latin-1; los acentos muertos se insertan literalmente.
+Click the taskbar's `us` indicator to change keyboard layouts, use
+Ctrl-Alt-Space, or enter `keymap es` in Terminal. The available layouts are
+`us`, `es`, `de` and `fr`; the selection persists on an installed BETA disk.
+The Spanish layout includes ñ and AltGr programming symbols. Internal text uses
+Latin-1; dead-key accents are inserted literally. The interface is in English.
 
-- Barra de tareas inferior con **Inicio**, apps ancladas e indicador de ventanas
-  abiertas. Pulsar el icono de la app activa la minimiza; volver a pulsarlo la abre.
-- Ventanas con minimizar, maximizar/restaurar y cerrar. Se arrastran por el titulo;
-  cada app conserva su posicion, tamano y estado de maximizado durante la sesion.
-  Las ventanas se superponen: pulsar una parte visible la trae al frente. Arrastra
-  la esquina inferior derecha para redimensionar. Minimizar o cerrar revela la
-  siguiente ventana; el extremo derecho de la barra muestra el escritorio.
-  Alt-Tab recorre las ventanas abiertas y Ctrl-W cierra la actual.
-- Doble clic en un acceso directo para abrirlo. Arrastra los iconos para moverlos.
-- Botón derecho: **Nuevo archivo**, cambiar nombre, cambiar icono, organizar y
-  actualizar. Cambiar icono recorre siete diseños incorporados; no importa imágenes.
-- Doble clic en un archivo abre el editor. `Ctrl-S` guarda su contenido.
-- Archivos incorpora Abrir, Nuevo, Nombre y Borrar. Ctrl-N crea un archivo,
-  Supr solicita confirmacion para borrarlo, y RePag/AvPag recorre la lista.
-- Los nombres, posiciones, diseños y archivos se conservan si existe un disco BETA
-  instalado. Sin ese disco los cambios viven en RAM y se pierden al reiniciar.
-- Inicio también se abre con la tecla Windows. Escape vuelve al escritorio o cierra
-  el menú. El reloj usa la hora UTC del firmware; si no esta disponible muestra tiempo
-  desde el arranque. Todavia no hay selector de zona horaria.
+- The bottom taskbar has **Start**, pinned apps and indicators for open windows.
+  Clicking the active app minimizes it; clicking again restores it.
+- Windows support minimize, maximize/restore and close. Drag the title bar to move
+  a window. Each app retains its position, size and maximized state for the session.
+  Windows overlap; clicking an exposed part raises it. Drag the bottom-right corner
+  to resize. Minimizing or closing reveals the next window. The taskbar's far-right
+  edge shows the desktop. Alt-Tab cycles windows; Ctrl-W closes the current window.
+- Double-click a shortcut to open it. Drag desktop icons to move them.
+- Right-click for **New file**, Rename, Change icon, Arrange icons and Refresh.
+  Change icon cycles seven built-in designs; it does not import images.
+- Double-click a file to open the editor. Ctrl-S saves its contents.
+- Files provides Open, New, Rename and Delete. Ctrl-N creates a file, Delete asks
+  for confirmation, and PgUp/PgDn scroll the list.
+- Names, positions, icon designs and files persist on an installed BETA disk.
+  Without it, changes stay in RAM and disappear on restart.
+- The Windows key opens Start. Escape returns to the desktop or closes the menu.
+  The clock uses firmware UTC, falling back to uptime if unavailable. There is no
+  time-zone selector yet.
 
-| Tecla | Aplicación |
+| Key | Application |
 | --- | --- |
-| F1 | Navegador HTML/CSS/JavaScript y HTTPS |
+| F1 | HTML/CSS/JavaScript and HTTPS browser |
 | F2 | Terminal |
-| F3 | Archivos y vista previa |
-| F4 | Sistema y accesos a los instaladores |
-| F5 | Engranajes de colores girando |
-| F6 | Editor ASM/texto |
+| F3 | Files and preview |
+| F4 | System and installer shortcuts |
+| F5 | Rotating colored gears |
+| F6 | ASM/text editor |
 
-En Engranajes: espacio pausa o reanuda; `+`/`-` cambian la velocidad.
+In Gears, Space pauses or resumes; `+` and `-` change speed.
 
-Inicio incluye un segundo panel con **todas las apps ASM instaladas**, incluidas
-las compiladas en el editor y las importadas desde USB. Pulsa su nombre para
-ejecutarlas y ver la salida en Terminal. Anterior/Siguiente o RePag/AvPag recorren
-la lista. En Terminal funcionan `run NOMBRE` y simplemente `NOMBRE`, con
-autocompletado mediante Tab. Los comandos del sistema tienen prioridad si una
-app utiliza el mismo nombre; en ese caso usa `run NOMBRE`.
+Start includes a second panel containing **all installed ASM apps**, including
+those built in the editor or imported from USB. Click an app to run it and see
+its output in Terminal. Previous/Next or PgUp/PgDn move through the list.
+Terminal accepts `run NAME` or just `NAME`, with Tab completion. System commands
+have priority over apps with the same name; use `run NAME` in that case.
 
-Puedes abrir Inicio con la tecla Windows y escribir para buscar tanto apps
-instaladas como herramientas del sistema. Flechas/Inicio/Fin seleccionan y Enter
-ejecuta; Escape cierra. La busqueda conserva el comando que estuvieras escribiendo
-en Terminal y el filtro de Archivos. Las teclas F1-F6 siguen cambiando de app.
+Open Start with the Windows key and type to search installed apps and system
+tools. Arrows/Home/End select, Enter launches, and Escape closes. Search preserves
+your unfinished terminal command and Files filter. F1–F6 still switch apps.
 
-## Archivos y memorias USB
+## Files and USB storage
 
-Archivos ahora permite buscar por nombre (`/` o Buscar), ver el tamano, copiar
-con Ctrl-C y pegar una copia con Ctrl-V. Pegar genera un nombre nuevo y conserva
-el original. Mantiene abrir/editar, crear, renombrar y borrar con confirmacion.
-El almacen local sigue limitado a 16 archivos de texto de 8191 bytes cada uno.
+Files supports name search (`/`, Ctrl-F or Search), size display, Ctrl-C copy and
+Ctrl-V paste. Pasting generates a new name and preserves the original. Open/edit,
+create, rename and confirmed deletion are available. Local storage is limited to
+16 text files of up to 8191 bytes each.
 
-El boton **Original / Nombre / Tamano** ordena la lista. La seleccion por raton y
-teclado sigue ese orden; las carpetas USB aparecen primero en los modos ordenados.
-Inicio/Fin saltan al primer/ultimo resultado y Ctrl-F activa la busqueda.
-**Ctrl-RePag / Ctrl-AvPag** desplazan la vista previa sin cambiar de archivo.
+The **Original / Name / Size** button sorts the list. Mouse and keyboard selection
+follow that order; USB folders appear first in sorted modes. Home/End select the
+first/last result. **Ctrl-PgUp / Ctrl-PgDn** scroll the preview without changing files.
 
-**Ctrl-Z en Archivos Local** recupera el ultimo archivo borrado, incluso su icono
-y posicion. En Terminal existe `undelete`. Este respaldo conserva un unico borrado
-durante la sesion; otro borrado lo reemplaza y reiniciar lo pierde. Restaurar nunca
-sobrescribe un nombre existente y requiere un hueco libre. Los archivos recuperados
-se guardan en el disco BETA si esta instalado; el respaldo de borrado vive en RAM.
+**Ctrl-Z in Local Files** restores the last deleted file, including its icon and
+position. Terminal also provides `undelete`. Only one deleted file is retained
+in RAM; another deletion replaces it and reboot discards it. Restore never
+overwrites an existing name and requires a free slot. Restored files are saved
+to an installed BETA disk, but the deletion backup itself is not persisted.
 
-Los comandos protegen mejor el trabajo: `touch` conserva los archivos existentes,
-`cp`/`mv` rechazan un destino ocupado y `mv` puede renombrar con el almacen lleno.
-`write` y `rm` avisan si ese archivo tiene cambios pendientes en el editor.
-Renombrar actualiza el nombre del editor abierto; una escritura externa sobre un
-archivo sin cambios pendientes actualiza tambien su buffer.
+`touch` preserves existing files; `cp`/`mv` reject occupied destination names.
+`mv` can rename even when storage is full. `write` and `rm` reject changes to a
+file with unsaved editor changes. Rename updates the open editor's filename;
+external writes update its buffer when there are no unsaved changes.
 
-Los botones **Local**, **USB >** y **Actualizar** seleccionan el origen, recorren
-las memorias detectadas y detectan nuevas conexiones. En USB puedes abrir carpetas
-con doble clic/Enter, volver con Atras/Retroceso, previsualizar texto y binarios,
-copiar texto a Local e instalar ejecutables BEX mediante **Instalar**.
-No sobrescribe un archivo local que ya tenga el mismo nombre.
+**Local**, **USB >** and **Refresh** select storage, cycle detected drives and
+scan for new connections. On USB, double-click/Enter opens folders and
+Back/Backspace returns. Preview text or binary data, copy text to Local, or
+install BEX executables with **Install**. Existing local names are not overwritten.
 
-Se ha implementado un controlador nativo **xHCI + USB Mass Storage Bulk-Only**,
-con lectura **FAT16/FAT32**, MBR, GPT, nombres largos y subcarpetas. Se ejecuta
-despues de ExitBootServices: no depende de que el firmware lea la memoria.
-Las unidades USB se abren en **solo lectura**. La vista previa lee como maximo
-8191 bytes; la importacion BEX admite hasta 65552 bytes. Copiar texto conserva
-el limite del almacen local. No hay soporte exFAT, NTFS, UAS, hubs USB ni USB HID.
-El codigo esta probado en QEMU; queda pendiente validarlo en hardware fisico.
+The native **xHCI + USB Mass Storage Bulk-Only** driver reads **FAT16/FAT32**, MBR,
+GPT, long filenames and subdirectories. It runs after ExitBootServices without
+firmware reads. USB drives are **read-only**. Preview reads at most 8191 bytes;
+BEX import accepts up to 65552 bytes. Text copying retains the local storage
+limit. There is no exFAT, NTFS, UAS, USB hub or USB HID support. Validation uses
+QEMU; physical hardware remains untested.
 
 ```text
 usb refresh
@@ -141,39 +134,36 @@ usb install FIB.BEX
 FIB
 ```
 
-Para probar una imagen de memoria USB dentro de QEMU, sin modificarla:
+To attach a USB drive image in QEMU without modifying it:
 
 ```sh
-make run USB_IMAGE=/ruta/memoria.img
+make run USB_IMAGE=/path/to/drive.img
 ```
 
-Hay mas detalles en [el documento USB](docs/USB.md).
+See [USB storage](docs/USB.md) for details.
 
-## Instaladores y barras de progreso
+## Installers and progress bars
 
-Abre **Sistema → Disk Installer** o el acceso directo **Instalar SO**. Selecciona
-el disco, marca la confirmación de borrado y pulsa **Instalar BETAOS**.
-**Se borra todo el disco seleccionado**, incluidas sus particiones. No hay dual
-boot, redimensionamiento ni instalación conservando datos anteriores.
+Open **System → Disk Installer** or **Install OS**. Select a disk, confirm erasure,
+and click **Install BETAOS**. **The entire selected disk is erased**, including
+its partitions. There is no dual boot, resizing or installation preserving data.
 
-El instalador crea GPT principal y de respaldo, una partición EFI FAT32 de 64 MiB,
-copia `EFI/BOOT/BOOTX64.EFI`, verifica los bytes leídos y guarda los datos del SO.
-Las barras muestran formato, copia, verificación y guardado. Necesita un disco
-SATA/AHCI con sectores lógicos de 512 bytes y al menos 128 MiB. No instala en
-NVMe ni en discos USB. Tras instalar en QEMU, cierra la VM y usa
-`make run-installed` para arrancar sin la ISO.
+The installer creates primary/backup GPT, a 64 MiB FAT32 EFI partition, copies
+`EFI/BOOT/BOOTX64.EFI`, verifies readback and saves OS state. Progress bars show
+formatting, copying, verification and saving. Installation requires SATA/AHCI,
+512-byte logical sectors and at least 128 MiB. NVMe and USB installation targets
+are unsupported. After installing in QEMU, close the VM and use
+`make run-installed` to boot without the ISO.
 
-La segunda partición utiliza un almacén de estado propio con CRC: conserva archivos,
-programas BEX instalados y configuración del escritorio. No es un sistema de
-archivos general montable desde otros SO. El guardado no es transaccional: un corte
-mientras se escribe puede invalidar el estado; el cargador comprueba su CRC.
-Si hay varios discos BETA, se monta el primero que detecta el controlador.
+The second partition stores checksummed state: files, installed BEX programs and
+desktop settings. It is not a general filesystem mountable by other OSes. Saving
+is not transactional: interrupted writes may invalidate state; loading checks
+the CRC. If several BETA disks exist, the first detected disk is mounted.
 
-Para las apps, abre **Apps ASM** desde el escritorio/Inicio/Sistema, o escribe
-`apps` en la terminal. Los botones instalan y desinstalan los paquetes locales.
-Los fallos muestran un dialogo visible: por ejemplo, almacen de apps lleno o disco
-de instalacion demasiado pequeno. Una operacion de apps fallida no guarda el estado.
-En terminal tambien puedes usar:
+Open **ASM Apps** from the desktop, Start or System, or enter `apps` in Terminal.
+Buttons install/uninstall bundled packages. Failures show a visible dialog,
+including full app storage or an undersized installation disk. Failed app
+operations do not save state. Terminal commands include:
 
 ```text
 programs
@@ -184,48 +174,47 @@ run memory
 uninstall memory
 ```
 
-`hello` está instalado inicialmente. Las apps son ejecutables reales x86-64; no se
-interpretan ni se simulan. Se ejecutan en modo kernel y comparten memoria con el SO.
-Un fallo o bucle infinito en una app puede bloquear BETAOS; aún no existe aislamiento.
+`hello` is installed initially. Apps are actual x86-64 executables, not interpreted
+or simulated. They execute in kernel mode and share OS memory. A fault or infinite
+loop can stop BETAOS; process isolation is not implemented.
 
-## Editor y ensamblador integrado
+## Integrated editor and assembler
 
-F6 abre un ejemplo listo para ejecutar. `Ctrl-S` guarda, `Ctrl-B` ensambla e instala
-el resultado como `scratch`, y `Ctrl-R` ensambla y ejecuta. Los errores incluyen la
-línea. También puedes utilizar `edit ARCHIVO` y `asm ARCHIVO NOMBRE_APP`.
+F6 opens a runnable example. Ctrl-S saves; Ctrl-B assembles and installs using the
+filename without its extension (`scratch` for `scratch.asm`); Ctrl-R builds and
+runs it. Errors include line numbers. Terminal also accepts `edit FILE` and
+`asm FILE APP_NAME`.
 
-El editor incorpora 16 pasos de deshacer/rehacer (Ctrl-Z/Ctrl-Y), navegacion por
-lineas, Inicio/Fin de linea, Ctrl-Inicio/Ctrl-Fin del documento, sangria con Tab y
-desplazamiento horizontal. Antes de cerrar o sustituir un texto modificado permite
-guardar, descartar o cancelar.
+The editor has 16 undo/redo steps (Ctrl-Z/Ctrl-Y), vertical navigation preserving
+the column, Home/End for the line, Ctrl-Home/Ctrl-End for the document, Tab
+indentation, automatic indentation, horizontal scrolling and Ctrl-F search.
+Before closing or replacing modified text, it offers Save, Discard or Cancel.
 
-El ensamblador propio soporta un **subconjunto** de sintaxis Intel x86-64, no toda
-la sintaxis de NASM. Tiene registros de 64 bits, etiquetas, saltos relativos,
-operaciones básicas, `lea [rel ...]`, llamadas a la API y datos `db`.
-Ver [la guía del ensamblador integrado](programs/ASSEMBLER.md) y
-[el formato de ejecutables y ABI](programs/README.md).
+The assembler implements an Intel x86-64 **subset**, not full NASM syntax:
+64-bit registers, labels, relative branches, basic operations, `lea [rel ...]`,
+API calls and `db` data. See the [assembler guide](programs/ASSEMBLER.md) and
+[executable format and ABI](programs/README.md).
 
 ## Terminal
 
-Historial con arriba/abajo, cursor izquierda/derecha, Inicio/Fin, autocompletado con
-Tab, desplazamiento con RePág/AvPág, `Ctrl-L` para limpiar y `Ctrl-C` para cancelar
-la línea. Se conserva el texto al cambiar de app. Las lineas de mas de 639 bytes
-se rechazan sin ejecutar el prefijo truncado; se muestra una indicacion visible.
+Up/Down navigate history; Left/Right move the cursor; Home/End jump along the
+line. Tab completes, PgUp/PgDn scroll, Ctrl-L clears and Ctrl-C cancels input.
+Input survives app switching. Lines exceeding 639 bytes are rejected visibly;
+the truncated prefix is never executed.
 
-Comandos: `help`, `clear`/`cls`, `about`, `mem`, `net`, `echo`, `ls`/`dir`,
-`write NOMBRE TEXTO`, `cat`/`type`, `rm`/`del`, `touch`, `cp`, `mv`, `wc`, `pwd`,
+Commands: `help`, `clear`/`cls`, `about`, `mem`, `net`, `echo`, `ls`/`dir`,
+`write NAME TEXT`, `cat`/`type`, `rm`/`del`, `touch`, `cp`, `mv`, `wc`, `pwd`,
 `history`, `uptime`, `uname`, `browse URL`, `programs`, `run`, `install`, `uninstall`,
 `apps`, `edit`, `asm`, `gears`, `disks`, `installer`, `install-os`, `save`, `load`,
-`reboot` y `halt`.
+`reboot` and `halt`.
 
-La terminal es un intérprete propio de comandos, **no un shell POSIX completo**:
-no tiene tuberías, redirecciones, scripting ni directorios jerárquicos. `/ram` es
-un espacio plano de 16 archivos de texto, hasta 8191 bytes y nombres de 31 caracteres.
-Los cambios de archivos se guardan automáticamente en un disco BETA montado.
-`save` guarda también las apps y el escritorio. Hay 16 espacios de apps; cada
-payload nativo tiene como máximo 64 KiB.
+This is a custom command interpreter, **not a complete POSIX shell**. There are
+no pipes, redirection, scripting or hierarchical local directories. `/ram` holds
+16 text files, each up to 8191 bytes with a 31-character name. File changes are
+autosaved to a mounted BETA disk. `save` also stores apps and desktop settings.
+There are 16 app slots, each with a native payload of at most 64 KiB.
 
-La instalación desde terminal exige la confirmación literal:
+Terminal installation requires literal confirmation:
 
 ```text
 disks
@@ -233,119 +222,119 @@ install-os
 install-os ERASE 0
 ```
 
-Este último comando borra **el disco 0 que detecta el SO invitado**, no una letra
-Windows ni un archivo indicado por ruta. Usa la ventana del instalador para ver
-el modelo y capacidad del destino antes de confirmar.
+The final command erases **disk 0 as detected by the guest OS**, not a Windows
+drive letter or a host path. Use the installer window to inspect the target's
+model and capacity before confirming.
 
-## Navegador y red
+## Browser and networking
 
-El navegador incorpora **HTTPS TLS 1.2 nativo**, validacion de cadena de certificados,
-nombre de servidor y fecha, HTTP/1.1, respuestas chunked y redirecciones. Usa las
-raices publicas Mozilla; no desactiva la validacion para cargar una pagina.
-Necesita hora UTC valida del firmware y entropia EFI RNG o RDRAND. `make run`
-habilita RDRAND en la CPU virtual. No incorpora TLS 1.3.
+The browser provides **native HTTPS TLS 1.2**, certificate-chain, hostname and
+date validation, HTTP/1.1, chunked responses and redirects. It uses Mozilla public
+roots and never disables validation to load a page. It needs valid firmware UTC
+and EFI RNG or RDRAND entropy. `make run` enables RDRAND on the virtual CPU.
+TLS 1.3 is not implemented.
 
-**Ctrl-L** selecciona la barra superior para introducir una direccion o una
-busqueda; Enter navega. Hay atras/adelante (Alt-Izquierda/Alt-Derecha), inicio,
-recarga, cancelacion, historial de sesion y rueda del raton. Escribir
-`google` o pulsar **Google** solicita `https://www.google.com/`. Escribir una consulta
-solicita el buscador Google por HTTPS. La pagina inicial es una interfaz propia de
-BETA Browser, con formulario hacia Google. **Ctrl-R** recarga, Tab selecciona enlaces
-y controles, Enter los activa y Escape cancela una carga.
+**Ctrl-L** selects the top address/search bar; Enter navigates. Controls include
+Back/Forward (Alt-Left/Alt-Right), Home, Reload, Cancel, session history and mouse
+wheel scrolling. Entering `google` or clicking **Google** requests
+`https://www.google.com/`. Search queries use Google over HTTPS. The start page
+is BETA Browser's own interface, with a Google search form. **Ctrl-R** reloads;
+Tab selects links/controls, Enter activates them and Escape cancels loading.
+English is requested through HTTP language preferences, navigator.language and
+the default search form; websites may choose their own language.
 
-Hay un DOM propio, estilos CSS basicos y **QuickJS real**, compilado dentro del SO:
-texto y colores, margenes, relleno, bordes redondeados, formularios GET, enlaces,
-scripts y hojas CSS externos e imports, eventos, temporizadores, Promises y `fetch` GET del
-mismo origen. CSS incluye centrado, margenes auto, porcentajes relativos al
-contenedor, filas/columnas flex, variables, reglas de ancho y `!important`.
-Los campos ocultos no se dibujan; los formularios GET incluyen solo controles
-validos, con cursor, seleccion Ctrl-A, Inicio/Fin y borrado. La interfaz y las paginas usan fuentes proporcionales TrueType con antialiasing;
-Terminal y Editor conservan la fuente monoespaciada. Se incluyen PNG, JPEG, GIF
-(primer fotograma) y BMP, con transparencia y limites de memoria.
-Ver [compatibilidad y limites del navegador](docs/WEB.md) y [licencias](THIRD_PARTY.md).
+The browser has its own DOM, basic CSS and **real QuickJS** compiled into the OS:
+text/colors, margins, padding, rounded borders, GET forms, links, external scripts,
+stylesheets/imports, events, timers, Promises and same-origin GET `fetch`. CSS
+includes centering, auto margins, containing-block percentages, flex rows/columns,
+variables, width rules and `!important`. Hidden inputs are not rendered. GET forms
+submit successful controls, with a caret, Ctrl-A selection, Home/End and deletion.
+The interface and web pages use antialiased proportional TrueType fonts; Terminal
+and Editor use a monospace font. PNG, JPEG, GIF (first frame) and BMP are supported,
+with transparency and memory limits. See [browser limits](docs/WEB.md) and
+[licenses](THIRD_PARTY.md).
 
-**No equivale a Chrome ni garantiza abrir la mayoria de webs actuales.** Faltan
-partes grandes de HTML/CSS y APIs de navegador, SVG, video, cookies, modulos
-JavaScript y almacenamiento web. Algunas paginas sencillas funcionan; sitios con
-aplicaciones complejas pueden aparecer incompletos o fallar. Las pruebas validan
-HTTPS y paginas controladas en QEMU; **la busqueda publica completa no se ha podido
-validar en este entorno**, que restringe las conexiones exteriores.
+**This is not equivalent to Chrome and does not guarantee compatibility with most
+current websites.** Large parts of HTML/CSS and browser APIs, SVG, video, cookies,
+JavaScript modules and web storage are absent. Simple pages may work; complex web
+apps may render incompletely or fail. Tests validate HTTPS and controlled QEMU
+pages; **complete public search has not been validated in this environment**, which
+restricts external connections.
 
-La red nativa utiliza RTL8139, ARP, IPv4, DHCP, DNS A y TCP. La carga y los recursos
-funcionan en segundo plano. No hay IPv6, renovacion de DHCP ni recuperacion TCP
-completa. Para probar una pagina local: `python3 -m http.server 8080` en el anfitrion
-y `http://10.0.2.2:8080/` en BETA Browser.
+The native network stack uses RTL8139, ARP, IPv4, DHCP, DNS A and TCP. Page/resource
+loading runs in the background. IPv6, DHCP renewal and complete TCP recovery are
+not implemented. To test a local page, run `python3 -m http.server 8080` on the
+host and open `http://10.0.2.2:8080/` in BETA Browser.
 
-## Hardware y USB de arranque
+## Hardware and bootable USB
 
-Requiere x86-64, UEFI de 64 bits con **Secure Boot desactivado**, GOP RGB/BGR de al
-menos 800×600 y teclado PS/2. El ratón PS/2 es opcional; USB HID aún no está soportado.
-La red necesita RTL8139 y un servidor DHCP. El almacenamiento necesita SATA/AHCI;
-no hay NVMe, Wi-Fi ni audio. 512 MiB de RAM son
-recomendables. El kernel usa un framebuffer intermedio, presenta solo los
-intervalos de pixeles modificados y actualiza el puntero sin repintar el escritorio.
-Las interrupciones PS/2 despiertan el bucle; PIT/HLT reduce el trabajo de CPU en
-reposo. Hay una ruta de sondeo si no se confirma el temporizador.
+Requires x86-64, 64-bit UEFI with **Secure Boot disabled**, RGB/BGR GOP of at least
+800×600 and a PS/2 keyboard. A PS/2 mouse is optional; USB HID is unsupported.
+Networking needs RTL8139 and DHCP. Disk storage needs SATA/AHCI; NVMe, Wi-Fi and
+audio are absent. 512 MiB RAM is recommended. Rendering uses a RAM framebuffer,
+presents only changed pixel spans and updates the pointer without repainting the
+desktop. PS/2 interrupts wake the loop; PIT/HLT reduces idle CPU work. Polling is
+used if timer operation cannot be confirmed.
 
-La ISO incluye arranque EFI El Torito y GPT/ESP para USB. Para usarla en una memoria
-USB, escribe **la imagen completa** en modo raw/DD con un grabador de imágenes:
-esto borra esa memoria. La ISO no se copia como un archivo normal. El firmware puede
-arrancar desde USB. Tras salir de UEFI, la lectura de almacenamiento requiere un
-controlador xHCI y un dispositivo Bulk-Only compatible; los teclados USB todavia
-no tienen controlador nativo. El modo BIOS antiguo solo está disponible en el
-experimento de 32 bits: `make legacy`, `make run32`, `make test32`.
+The ISO contains EFI El Torito and GPT/ESP USB boot structures. Write **the entire
+image** to a USB drive in raw/DD mode using an image writer; this erases the drive.
+Do not copy the ISO as an ordinary file. Firmware can boot it from USB. After
+leaving UEFI, storage access needs native xHCI and a supported Bulk-Only device;
+USB keyboards still lack a native driver. Legacy BIOS boot exists only in the
+32-bit experiment: `make legacy`, `make run32`, `make test32`.
 
-## Resolucion de pantalla
+## Screen resolution
 
-Puedes guardar `BETA.CFG` en la raiz de la particion EFI:
+Place `BETA.CFG` in the EFI partition's root:
 
 ```text
 resolution=1280x800
 ```
 
-El arranque elige el modo GOP RGB/BGR disponible mas cercano. Los valores validos
-van de 800x600 a 4096x2160; entradas invalidas mantienen 1024x768 como preferencia.
-El instalador escribe y verifica esta configuracion para conservar la resolucion
-al arrancar desde el disco. Para generar una ISO alternativa sin modificar la normal:
+Boot selects the closest available RGB/BGR GOP mode. Valid values range from
+800x600 to 4096x2160; invalid input retains the 1024x768 preference. Installation
+writes and verifies this setting to preserve the resolution when booting from
+disk. To build an alternate ISO without changing the default:
 
 ```sh
 python3 tools/profile_iso.py 800x600
 ```
 
-## Rendimiento y calidad
+## Performance and quality
 
-Las mediciones locales de QEMU TCG registraron una reduccion de CPU en reposo desde
-aproximadamente 100% hasta 2.5–3%. El repintado de engranajes por regiones elevo la
-animacion medida de unos 53 a 57 fps y redujo su CPU activa de ~100% a ~46% en esa
-misma configuracion. Son resultados de ese entorno, no garantias para todo hardware.
-Ver [el informe de calidad](qa/QUALITY.md), los JSON de mediciones y el manifiesto
-`qa/latest-results.json`. `perf` y `netstats` muestran contadores de diagnostico.
+Local QEMU TCG measurements showed idle CPU falling from about 100% to 2.5–3%.
+Regional gear repainting raised measured animation from about 53 to 57 fps and
+reduced active CPU from about 100% to 46% in the same configuration. These are
+results from that environment, not hardware-independent guarantees. See the
+[quality report](qa/QUALITY.md), measurement JSON files and historical
+`qa/latest-results.json`. `perf` and `netstats` expose diagnostic counters.
+Revision-specific results are in `qa/revision-results.json`; the English-language
+update has its own report in `qa/english-results.json`.
 
-## Pruebas
+## Tests
 
-La bateria completa requiere Pillow para las pruebas de imagenes (`python-pillow`).
+The full suite requires Pillow (`python-pillow`) for image tests.
 
 ```sh
-make test                         # ensamblador + escritorio/ISO real en QEMU
-make test-install                 # crea disco virtual, instala y arranca sin ISO
-python3 tests/desktop.py --usb     # arranque GPT/USB
-make qa                          # toda la bateria y 5 minutos de actividad repetida
+make test                         # assembler and real desktop ISO in QEMU
+make test-install                 # install to a virtual disk and boot without ISO
+python3 tests/desktop.py --usb     # GPT/USB boot
+make qa                           # full suite plus five minutes of repeated activity
 ```
 
-Se verifican creación/renombrado/arrastre de iconos, cambios de diseño, maximizar y
-restaurar, menús, apps ASM, editor y ensamblado dentro del SO, animación de engranajes,
-DHCP/TCP/HTTP, confirmación de borrado, GPT/CRC, FAT32 y persistencia tras reiniciar.
-Tambien se ejecutan ASan/UBSan sobre el ensamblador, cargador, protocolos y
-renderizador, con mutaciones deterministas y comparaciones de repintado parcial
-frente al completo. Los fallos intencionados de una app ASM verifican los marcos
-de excepcion (vector, codigo, RIP y CR2): no prueban aislamiento de procesos.
-Los discos de prueba están en `build/installed-os.img`; nunca se selecciona un disco
-físico del anfitrión. Capturas y registros también quedan en `build/`.
+Tests cover file creation/rename, icon dragging/design changes, maximize/restore,
+menus, ASM apps, in-OS editing/assembly, gear animation, DHCP/TCP/HTTP, erasure
+confirmation, GPT/CRC, FAT32 and restart persistence. ASan/UBSan exercise the
+assembler, loader, protocols and renderer with deterministic mutations and partial
+versus full repaint comparisons. Deliberately faulting ASM apps verify exception
+frames (vector, code, RIP and CR2), not process isolation. Test disks such as
+`build/installed-os.img`, screenshots and logs stay in `build/`; tests never select
+a physical host disk.
 
-Fuentes principales: `desktop/boot.c`, `gui.c`, `input.c`, `net.c`, `program.c`,
-`assembler.c`, `storage.c`, `usb.c`, `fat.c`, y `desktop/cpu.S`. El SO continúa siendo un prototipo:
-no hay procesos de usuario, protección de memoria, scheduler, SMP,
-controladores universales ni actualizaciones de paquetes por Internet.
+Main sources: `desktop/boot.c`, `gui.c`, `input.c`, `net.c`, `program.c`,
+`assembler.c`, `storage.c`, `usb.c`, `fat.c` and `desktop/cpu.S`. This remains a
+prototype without user processes, memory protection, a scheduler, SMP, universal
+drivers or Internet package updates.
 
-El arranque sigue las interfaces de [UEFI](https://uefi.org/specs/UEFI/2.10/07_Services_Boot_Services.html)
-y el controlador SATA sigue las estructuras [AHCI de Intel](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/serial-ata-ahci-spec-rev1_2.pdf).
+Boot follows [UEFI](https://uefi.org/specs/UEFI/2.10/07_Services_Boot_Services.html);
+the SATA driver follows [Intel AHCI](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/serial-ata-ahci-spec-rev1_2.pdf).

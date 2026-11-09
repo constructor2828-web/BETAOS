@@ -21,7 +21,7 @@ install memory
 run memory
 ```
 
-The desktop's **Programa ASM** shortcut also launches `hello`.
+The desktop's **ASM Program** shortcut also launches `hello`.
 
 To write your own:
 

@@ -677,7 +677,7 @@ void web_queue_navigation(const char *url) {
     return;
   if (starts(url, "javascript:") || starts(url, "data:") ||
       starts(url, "file:")) {
-    gui_status("Esquema de enlace no soportado");
+    gui_status("Unsupported link scheme");
     return;
   }
   resolve(url, navigation, sizeof(navigation));
@@ -1126,7 +1126,7 @@ static void submit(int i) {
     return;
   const char *method = web_get_attr(i, "method");
   if (*method && !equal(method, "get")) {
-    gui_status("Este formulario requiere POST, todavia no disponible");
+    gui_status("This form requires POST, which is not supported yet");
     return;
   }
   if (web_js_event(i, "submit"))
@@ -1172,7 +1172,7 @@ static void submit(int i) {
         url[at++] = '=';
       for (const u8 *s = (const u8 *)values[k]; *s; s++) {
         if (at + 4 >= sizeof(url)) {
-          gui_status("Formulario demasiado largo: no se ha enviado");
+          gui_status("Form too long: not sent");
           return;
         }
         u8 c = *s;
@@ -1323,7 +1323,7 @@ int web_key(int c) {
       if ((*q & 0xc0) != 0x80)
         count++;
     if (count >= limit || length + 3 >= sizeof(value)) {
-      gui_status("El campo ha alcanzado su limite");
+      gui_status("Field length limit reached");
       return 1;
     }
     unsigned bytes = c < 128 ? 1 : 2;
@@ -1457,19 +1457,19 @@ void web_home(void) {
       "nav{margin-top:24px;display:flex;justify-content:center;gap:24px}a{"
       "color:#2861c7}"
       "@media(max-width:500px){main{margin:20px auto;padding:16px}}"
-      "</style></head><body><main><h1>BETA Browser</h1><p>Un lugar para "
-      "empezar a explorar.</p>"
+      "</style></head><body><main><h1>BETA Browser</h1><p>A place to "
+      "start exploring.</p>"
       "<form action=\"https://www.google.com/search\"><input type=hidden "
-      "name=hl value=es>"
+      "name=hl value=en>"
       "<input type=hidden name=gbv value=1><input type=hidden name=udm "
       "value=14>"
-      "<input type=search name=q placeholder=\"Buscar en Google\" "
-      "aria-label=\"Buscar en Google\">"
-      "<button type=submit>Buscar</button></form><nav><a "
+      "<input type=search name=q placeholder=\"Search Google\" "
+      "aria-label=\"Search Google\">"
+      "<button type=submit>Search</button></form><nav><a "
       "href=\"https://www.google.com/\">Google</a>"
-      "<a href=\"https://es.wikipedia.org/\">Wikipedia</a></nav>"
-      "<p style=\"margin-top:34px;font-size:12px\">Ctrl-L para escribir una "
-      "direccion o buscar</p>"
+      "<a href=\"https://en.wikipedia.org/\">Wikipedia</a></nav>"
+      "<p style=\"margin-top:34px;font-size:12px\">Ctrl-L to enter an "
+      "address or search</p>"
       "</main></body></html>");
 }
 

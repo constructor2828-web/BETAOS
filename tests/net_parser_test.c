@@ -50,7 +50,7 @@ int main(void){
  }
  tcp_state=0;browser_state=B_IDLE;dhcp_state=0;
  browser_load("google");assert(!strcmp(browser_address(),"https://www.google.com/"));
- browser_load("native asm search");assert(!strcmp(browser_address(),"https://www.google.com/search?gbv=1&udm=14&hl=es&q=native%20asm%20search"));
+ browser_load("native asm search");assert(!strcmp(browser_address(),"https://www.google.com/search?gbv=1&udm=14&hl=en&q=native%20asm%20search"));
  browser_load("caf\xe9");assert(strstr(browser_address(),"caf%C3%A9"));
  browser_load("example.org/docs");assert(!strcmp(browser_address(),"https://example.org/docs"));
  const char *wire="4;ext=yes\r\nWiki\r\n5\r\npedia\r\n0\r\nTrailer: yes\r\n\r\n";

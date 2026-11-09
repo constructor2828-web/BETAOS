@@ -69,7 +69,7 @@ static int boot(unsigned disk, u64 start, u64 limit) {
   generation = usb_generation(drive);
   mounted = 1;
   strcopy(status_text,
-          bits == 32 ? "USB FAT32 / solo lectura" : "USB FAT16 / solo lectura",
+          bits == 32 ? "USB FAT32 / read-only" : "USB FAT16 / read-only",
           sizeof(status_text));
   return 1;
 }
@@ -78,12 +78,12 @@ int fat_mount(unsigned disk) {
   cached_lba = ~0ull;
   u64 size = usb_sectors(disk);
   if (!size)
-    return fail("USB desconectado o no disponible");
+    return fail("USB disconnected or unavailable");
   if (boot(disk, 0, size))
     return 1;
   u8 mbr[512];
   if (!usb_read_sector(disk, 0, mbr) || read_le16(mbr + 510) != 0xaa55)
-    return fail("USB sin particion FAT16/FAT32 valida");
+    return fail("USB has no valid FAT16/FAT32 partition");
   for (unsigned i = 0; i < 4; i++) {
     const u8 *p = mbr + 446 + i * 16;
     unsigned type = p[4];
@@ -122,7 +122,7 @@ int fat_mount(unsigned disk) {
         return 1;
     }
   }
-  return fail("USB: solo FAT16/FAT32; exFAT/NTFS no soportados");
+  return fail("USB: FAT16/FAT32 only; exFAT/NTFS unsupported");
 }
 u32 fat_root(void) { return root_cluster; }
 static int valid_cluster(u32 c) { return c >= 2 && c < clusters + 2; }
@@ -169,19 +169,19 @@ int fat_list(u32 directory, struct FatEntry *out, unsigned cap) {
     return -1;
   do {
     if (++steps > clusters + 1 || steps > 256)
-      return fail("USB: directorio ciclico o demasiado grande"), -1;
+      return fail("USB: directory loop or directory too large"), -1;
     for (unsigned i = 0; i + 1 < steps; i++)
       if (directory && visited[i] == current)
-        return fail("USB: directorio ciclico"), -1;
+        return fail("USB: directory loop"), -1;
     visited[steps - 1] = current;
     unsigned sectors = directory ? spc : root_sectors;
     for (unsigned s = 0; s < sectors; s++) {
       if (!sector_budget-- || cycles() > deadline)
-        return fail("USB: directorio supera el limite de lectura"), count;
+        return fail("USB: directory exceeds read limit"), count;
       u64 lba =
           directory ? data_lba + (u64)(current - 2) * spc + s : root_lba + s;
       if (!read(lba, sector))
-        return fail("USB: error al leer directorio"), -1;
+        return fail("USB: failed to read directory"), -1;
       for (unsigned at = 0; at < 512; at += 32) {
         const u8 *e = sector + at;
         if (!e[0])
@@ -225,7 +225,7 @@ int fat_list(u32 directory, struct FatEntry *out, unsigned cap) {
           continue;
         }
         if (count == cap)
-          return fail("USB: lista limitada; directorio contiene mas entradas"),
+          return fail("USB: list truncated; directory has more entries"),
                  count;
         struct FatEntry *v = &out[count];
         memset(v, 0, sizeof(*v));
@@ -257,14 +257,14 @@ int fat_list(u32 directory, struct FatEntry *out, unsigned cap) {
         v->size = read_le32(e + 28);
         v->directory = !!(e[11] & 16);
         if ((v->directory || v->size) && !valid_cluster(v->cluster))
-          return fail("USB: entrada FAT no valida"), -1;
+          return fail("USB: invalid FAT entry"), -1;
         count++;
       }
     }
     if (!directory)
       break;
     if (!next(current, &current))
-      return fail("USB: cadena FAT no valida"), -1;
+      return fail("USB: invalid FAT chain"), -1;
   } while (current);
   return count;
 }
@@ -273,14 +273,14 @@ static int read_file(const struct FatEntry *entry, void *buffer, u32 cap,
   if (got)
     *got = 0;
   if (!mounted || !entry || !buffer || !got || entry->directory)
-    return fail("USB: selecciona un archivo");
+    return fail("USB: select a file");
   if (generation != usb_generation(drive))
-    return fail("USB: lectura interrumpida; comprueba la conexion");
+    return fail("USB: read interrupted; check the connection");
   if (entry->size > cap && !prefix)
-    return fail("USB: archivo supera el limite de lectura");
+    return fail("USB: file exceeds read limit");
   u32 length = entry->size < cap ? entry->size : cap;
   if (length > 65552)
-    return fail("USB: limite de lectura de 65552 bytes");
+    return fail("USB: 65552-byte read limit");
   if (!length)
     return 1;
   u32 current = entry->cluster, used = 0, steps = 0;
@@ -288,16 +288,16 @@ static int read_file(const struct FatEntry *entry, void *buffer, u32 cap,
   u32 visited[129];
   while (used < length) {
     if (!valid_cluster(current) || steps >= 129 || steps >= clusters)
-      return fail("USB: cadena FAT ciclica o no valida");
+      return fail("USB: cyclic or invalid FAT chain");
     for (unsigned i = 0; i < steps; i++)
       if (visited[i] == current)
-        return fail("USB: cadena FAT ciclica o no valida");
+        return fail("USB: cyclic or invalid FAT chain");
     visited[steps++] = current;
     for (unsigned s = 0; s < spc && used < length; s++) {
       if (cycles() > deadline)
-        return fail("USB: lectura supera el limite de tiempo");
+        return fail("USB: read timed out");
       if (!read(data_lba + (u64)(current - 2) * spc + s, sector))
-        return fail("USB: lectura interrumpida; comprueba la conexion");
+        return fail("USB: read interrupted; check the connection");
       unsigned n = length - used;
       if (n > 512)
         n = 512;
@@ -305,7 +305,7 @@ static int read_file(const struct FatEntry *entry, void *buffer, u32 cap,
       used += n;
     }
     if (used < length && (!next(current, &current) || !current))
-      return fail("USB: archivo truncado");
+      return fail("USB: truncated file");
   }
   *got = used;
   return 1;

@@ -16,7 +16,7 @@ try:
  m.wait('USB STORAGE: 0');m.key('f2');m.type('usb ls');m.wait('USB FILE: Long filename from USB.txt')
  m.type('usb cat README.TXT');m.wait('REAL USB STORAGE / native xHCI FAT16 reader')
  m.type('usb cd DOCS');m.wait('USB FILE: NESTED.TXT');m.type('usb cat NESTED.TXT');m.wait('Nested folder works.')
- m.type('usb back');m.type('usb cp README.TXT');m.wait('Copiado a archivos locales. USB original intacto.')
+ m.type('usb back');m.type('usb cp README.TXT');m.wait('Copied to local files. USB original unchanged.')
  m.type('cat README.TXT');m.wait('REAL USB STORAGE / native xHCI FAT16 reader')
  # Select the BEX through Files and install with its toolbar.
  m.key('f3');m.wait('UI APP: files');time.sleep(.15);click(150,224);m.wait('UI USB FILE: FIB.BEX');click(700,150)
@@ -26,7 +26,7 @@ try:
  click(150,180);m.screenshot('files-usb-native')
  # Unplug: a prior FAT selection must not silently read another device.
  m.command('device_del',{'id':'flash'});time.sleep(.25)
- m.key('f2');m.type('usb cat README.TXT');m.wait('USB: lectura interrumpida; comprueba la conexion')
+ m.key('f2');m.type('usb cat README.TXT');m.wait('USB: read interrupted; check the connection')
  offset=m.log.stat().st_size;m.type('usb refresh');m.wait('FILES:',start=offset)
  m.command('blockdev-add',{'driver':'raw','node-name':'stick2','read-only':True,'file':{'driver':'file','filename':str(p)}})
  m.command('device_add',{'driver':'usb-storage','drive':'stick2','bus':'xhci.0','id':'flash2'});time.sleep(.2)

@@ -136,7 +136,7 @@ static u32 usb_directories[16];
 static char usb_path[16][32];
 static struct FatEntry usb_entries[96];
 static char file_message[160] =
-    "Ctrl-F buscar / Ctrl-Z recuperar / Ctrl-C copiar / Ctrl-V pegar";
+    "Ctrl-F search / Ctrl-Z restore / Ctrl-C copy / Ctrl-V paste";
 static char file_clipboard[8192], clipboard_name[32], file_filter[32];
 static int file_search;
 static unsigned file_sort;
@@ -209,8 +209,8 @@ static void files_build_order(void) {
     }
 }
 static const char *launcher_builtins[] = {
-    "Navegador",  "Terminal",   "Archivos",    "Sistema",
-    "Engranajes", "Editor ASM", "Instalar SO", "Apps ASM"};
+    "Browser",  "Terminal",   "Files",    "System",
+    "Gears", "ASM Editor", "Install OS", "ASM Apps"};
 /* Negative values encode built-in pages; nonnegative values index installed
  * apps. */
 static int launcher_order[24];
@@ -748,6 +748,18 @@ int desktop_save(void) {
   return disk_save(state_data,
                    16 + sizeof(files) + sizeof(desktop_config) + bytes);
 }
+static void translate_default_icons(void) {
+  static const char *old_names[] = {
+      "Navegador", "Terminal", "Archivos", "Sistema", "Engranajes",
+      "Editor ASM", "Programa ASM", "Apps ASM", "Instalar SO"};
+  static const char *new_names[] = {
+      "Browser", "Terminal", "Files", "System", "Gears",
+      "ASM Editor", "ASM Program", "ASM Apps", "Install OS"};
+  /* Only migrate the old defaults; keep names the user chose. */
+  for (unsigned i = 0; i < 9; i++)
+    if (!strcmp(desktop_config.icons[i].label, old_names[i]))
+      strcopy(desktop_config.icons[i].label, new_names[i], 32);
+}
 void desktop_restore(void) {
   if (editor_modified) {
     append("Restore blocked: save or discard editor changes first.\n");
@@ -795,6 +807,7 @@ void desktop_restore(void) {
       v->style = 6;
     v->label[31] = 0;
   }
+  translate_default_icons();
   desktop_config.editor_name[31] = 0;
   if (desktop_config.editor_name[0])
     strcopy(editor_name, desktop_config.editor_name, sizeof(editor_name));
@@ -857,7 +870,7 @@ static void file_delete(int f) {
   deleted_file.icon = desktop_config.icons[9 + f];
   if (!strcmp(editor_name, files[f].name)) {
     editor_modified = 1;
-    strcopy(editor_result, "Archivo borrado; Ctrl-Z en Archivos lo restaura.",
+    strcopy(editor_result, "File deleted; Ctrl-Z in Files restores it.",
             sizeof(editor_result));
   }
   serial("FILE DELETED: ");
@@ -868,23 +881,23 @@ static void file_delete(int f) {
     selected_file = -1;
   if (desktop_selected == 9 + f)
     desktop_selected = -1;
-  files_message("Archivo borrado. Ctrl-Z en Local recupera el ultimo borrado.");
+  files_message("File deleted. Ctrl-Z in Local restores the last deletion.");
 }
 static void file_undelete(void) {
   if (files_usb && page == 2) {
-    files_message("USB es de solo lectura; restaura en Local.");
+    files_message("USB is read-only; restore in Local.");
     return;
   }
   if (!deleted_file.name[0]) {
-    files_message("No hay un borrado que recuperar en esta sesion.");
+    files_message("No deleted file to restore in this session.");
     return;
   }
   if (file_find(deleted_file.name) >= 0) {
-    files_message("Ese nombre ya existe. Renombralo antes de restaurar.");
+    files_message("That name already exists. Rename it before restoring.");
     return;
   }
   if (!file_put(deleted_file.name, deleted_file.data)) {
-    files_message("No queda espacio para restaurar el archivo.");
+    files_message("Not enough space to restore the file.");
     return;
   }
   selected_file = file_find(deleted_file.name);
@@ -896,7 +909,7 @@ static void file_undelete(void) {
     desktop_save();
   file_filter[0] = 0;
   file_preview_scroll = files_scroll = 0;
-  files_message("Archivo recuperado.");
+  files_message("File restored.");
 }
 static void usb_directory(void) {
   file_preview_scroll = 0;
@@ -959,8 +972,8 @@ static void usb_preview(void) {
   const struct FatEntry *e = &usb_entries[usb_selected];
   if (e->directory) {
     strcopy(usb_preview_text,
-            "Carpeta / doble clic para abrir.\nAtras vuelve al directorio "
-            "anterior.",
+            "Folder / double-click to open.\nBack returns to the previous "
+            "directory.",
             sizeof(usb_preview_text));
     return;
   }
@@ -973,9 +986,9 @@ static void usb_preview(void) {
   if (file_text(usb_file_data, size)) {
     strcopy(usb_preview_text, (char *)usb_file_data, sizeof(usb_preview_text));
     if (e->size > size)
-      files_message("Vista previa limitada a 8191 bytes; original intacto.");
+      files_message("Preview limited to 8191 bytes; original unchanged.");
   } else {
-    strcopy(usb_preview_text, "ARCHIVO BINARIO / HEX\n",
+    strcopy(usb_preview_text, "BINARY FILE / HEX\n",
             sizeof(usb_preview_text));
     unsigned used = strlen(usb_preview_text), limit = size < 512 ? size : 512;
     const char *hex = "0123456789ABCDEF";
@@ -1000,11 +1013,11 @@ static void usb_action(unsigned action) {
   const struct FatEntry *entry = &usb_entries[usb_selected];
   if (entry->directory) {
     if (action != 0) {
-      files_message("Abre la carpeta para seleccionar un archivo.");
+      files_message("Open the folder to select a file.");
       return;
     }
     if (usb_depth == 15) {
-      files_message("Limite de 15 subcarpetas.");
+      files_message("Maximum folder depth: 15.");
       return;
     }
     u32 cluster = entry->cluster;
@@ -1032,35 +1045,35 @@ static void usb_action(unsigned action) {
         break;
       }
     if (program_exists(name)) {
-      files_message("Ya existe esa app; desinstalala antes de reemplazarla.");
+      files_message("App already exists; uninstall it before replacing it.");
       return;
     }
     if (program_install_blob(name, usb_file_data, size, append)) {
       if (disk_mounted())
         desktop_save();
-      files_message("App ASM instalada; disponible en Inicio y por su nombre.");
+      files_message("ASM app installed; available in Start and by name.");
     }
   } else {
     if (!file_text(usb_file_data, size)) {
-      files_message("El almacen local admite texto; usa Instalar para BEX.");
+      files_message("Local storage accepts text; use Install for BEX.");
       return;
     }
     if (file_find(name) >= 0) {
-      files_message("Ya existe ese nombre local; renombralo antes de copiar.");
+      files_message("Local name already exists; rename it before copying.");
       return;
     }
     if (editor_modified && !strcmp(editor_name, name)) {
       files_message(
-          "Guarda o descarta el editor antes de importar ese nombre.");
+          "Save or discard editor changes before importing that name.");
       return;
     }
     if (!file_put(name, (char *)usb_file_data)) {
-      files_message("Almacen local lleno o nombre no valido.");
+      files_message("Local storage full or invalid name.");
       return;
     }
     if (disk_mounted())
       desktop_save();
-    files_message("Copiado a archivos locales. USB original intacto.");
+    files_message("Copied to local files. USB original unchanged.");
   }
 }
 static void file_copy(void) {
@@ -1071,16 +1084,16 @@ static void file_copy(void) {
   if (selected_file >= 0 && files[selected_file].name[0]) {
     strcopy(file_clipboard, files[selected_file].data, sizeof(file_clipboard));
     strcopy(clipboard_name, files[selected_file].name, sizeof(clipboard_name));
-    files_message("Archivo copiado al portapapeles. Ctrl-V para duplicarlo.");
+    files_message("File copied to clipboard. Ctrl-V to duplicate it.");
   }
 }
 static void file_paste(void) {
   if (files_usb) {
-    files_message("USB es de solo lectura. Pega en Local.");
+    files_message("USB is read-only. Paste in Local.");
     return;
   }
   if (!*clipboard_name) {
-    files_message("Portapapeles vacio.");
+    files_message("Clipboard empty.");
     return;
   }
   char name[32];
@@ -1092,17 +1105,17 @@ static void file_paste(void) {
     if (file_find(name) < 0 &&
         !(editor_modified && !strcmp(editor_name, name))) {
       if (!file_put(name, file_clipboard))
-        files_message("No queda espacio local.");
+        files_message("Local storage full.");
       else {
         selected_file = file_find(name);
         if (disk_mounted())
           desktop_save();
-        files_message("Copia creada.");
+        files_message("Copy created.");
       }
       return;
     }
   }
-  files_message("No hay un nombre libre para la copia.");
+  files_message("No available name for the copy.");
 }
 static void editor_reset_history(void) {
   undo_head = undo_count = redo_count = 0;
@@ -1137,7 +1150,7 @@ static void editor_restore_snapshot(const struct EditSnapshot *state) {
 }
 static int editor_save(void) {
   if (!file_put(editor_name, editor)) {
-    strcopy(editor_result, "No se pudo guardar: almacenamiento lleno.",
+    strcopy(editor_result, "Cannot save: storage full.",
             sizeof(editor_result));
     gui_progress("SAVE FAILED", editor_result, 1, 1);
     return 0;
@@ -1146,8 +1159,8 @@ static int editor_save(void) {
   strcopy(editor_saved_text, editor, sizeof(editor_saved_text));
   editor_modified = 0;
   strcopy(editor_result,
-          saved ? "Archivo guardado / Ctrl-B ensambla"
-                : "Guardado en RAM; fallo al guardar en disco.",
+          saved ? "File saved / Ctrl-B to assemble"
+                : "Saved in RAM; disk save failed.",
           sizeof(editor_result));
   serial("EDITOR SAVED\n");
   return 1;
@@ -1292,7 +1305,7 @@ static void execute(void) {
       if (name[0] >= '0' && name[0] <= '3' && !name[1])
         usb_choose(name[0] - '0');
       else
-        files_message("Uso: usb mount 0..3");
+        files_message("Usage: usb mount 0..3");
     } else if (!strcmp(args, "back"))
       usb_action(3);
     else if (!*args || !strcmp(args, "ls")) {
@@ -1313,14 +1326,14 @@ static void execute(void) {
         if (file_name_equal(usb_entries[i].name, name))
           found = i;
       if (found < 0)
-        files_message("Archivo USB no encontrado.");
+        files_message("USB file not found.");
       else {
         usb_selected = found;
         if (!strcmp(args, "cd")) {
           if (usb_entries[found].directory)
             usb_action(0);
           else
-            files_message("No es una carpeta.");
+            files_message("Not a folder.");
         } else if (!strcmp(args, "cat")) {
           usb_preview();
           append(usb_preview_text);
@@ -1376,7 +1389,7 @@ static void execute(void) {
       if (f < 0 && file_put(args, ""))
         f = file_find(args);
       if (f < 0)
-        append("No se pudo abrir el archivo.\n");
+        append("Could not open the file.\n");
       else {
         used = cursor_pos = 0;
         input[0] = 0;
@@ -1590,9 +1603,9 @@ void gui_init(void) {
     windows[i].y = 88;
   }
   desktop_config.version = 1;
-  const char *labels[] = {"Navegador",    "Terminal",   "Archivos",
-                          "Sistema",      "Engranajes", "Editor ASM",
-                          "Programa ASM", "Apps ASM",   "Instalar SO"};
+  const char *labels[] = {"Browser",    "Terminal",   "Files",
+                          "System",      "Gears", "ASM Editor",
+                          "ASM Program", "ASM Apps",   "Install OS"};
   for (int i = 0; i < 25; i++) {
     desktop_config.icons[i].x = 16 + (i / 6) * 112;
     desktop_config.icons[i].y = 20 + (i % 6) * 80;
@@ -1837,10 +1850,10 @@ void gui_key(int c) {
     } else if (c == '\r' || c == '\n') {
       int ok = 0;
       if (!*dialog_text)
-        strcopy(dialog_error, "Escribe un nombre.", sizeof(dialog_error));
+        strcopy(dialog_error, "Enter a name.", sizeof(dialog_error));
       else if (dialog_mode == 1) {
         if (file_find(dialog_text) >= 0)
-          strcopy(dialog_error, "Ya existe un archivo con ese nombre.",
+          strcopy(dialog_error, "A file with that name already exists.",
                   sizeof(dialog_error));
         else if (file_put(dialog_text, "")) {
           int f = file_find(dialog_text);
@@ -1856,7 +1869,7 @@ void gui_key(int c) {
           serial(dialog_text);
           serial("\n");
         } else {
-          strcopy(dialog_error, "No hay espacio para crear mas archivos.",
+          strcopy(dialog_error, "No space to create more files.",
                   sizeof(dialog_error));
           serial("FILE CREATE FAILED: full\n");
         }
@@ -1866,7 +1879,7 @@ void gui_key(int c) {
       } else if (desktop_selected >= 9) {
         int f = desktop_selected - 9;
         if (!file_name_valid(dialog_text))
-          strcopy(dialog_error, "Nombre no valido: sin /, \\ ni controles.",
+          strcopy(dialog_error, "Invalid name: no /, \\ or control characters.",
                   sizeof(dialog_error));
         else if (file_find(dialog_text) < 0 || file_find(dialog_text) == f) {
           if (!strcmp(editor_name, files[f].name))
@@ -1874,7 +1887,7 @@ void gui_key(int c) {
           strcopy(files[f].name, dialog_text, 32);
           ok = 1;
         } else
-          strcopy(dialog_error, "Ese nombre ya existe.", sizeof(dialog_error));
+          strcopy(dialog_error, "That name already exists.", sizeof(dialog_error));
       }
       if (ok) {
         dialog_mode = 0;
@@ -1958,7 +1971,7 @@ void gui_key(int c) {
   }
   if (c == 7 && (page == 2 || page < 0)) {
     if (page == 2 && files_usb) {
-      files_message("USB es de solo lectura.");
+      files_message("USB is read-only.");
       return;
     }
     if (page < 0) {
@@ -2025,7 +2038,7 @@ void gui_key(int c) {
     }
     if (c == 15) {
       if (files_usb) {
-        files_message("Crea archivos en Local; USB es de solo lectura.");
+        files_message("Create files in Local; USB is read-only.");
         return;
       }
       file_action(1);
@@ -2106,8 +2119,8 @@ void gui_key(int c) {
         if (match) {
           editor_cursor = match - editor;
           editor_goal_column = ~0u;
-          strcopy(editor_result, "Coincidencia encontrada. Enter: siguiente; Esc: editar.", sizeof(editor_result));
-        } else strcopy(editor_result, "No se encontro el texto.", sizeof(editor_result));
+          strcopy(editor_result, "Match found. Enter: next; Esc: edit.", sizeof(editor_result));
+        } else strcopy(editor_result, "Text not found.", sizeof(editor_result));
       }
     } else if (c == 8 && length) editor_query[length - 1] = 0;
     else if (((c >= 32 && c < 127) || (c >= 160 && c <= 255)) && length + 1 < sizeof(editor_query)) {
@@ -2221,7 +2234,7 @@ void gui_key(int c) {
         editor_refresh_modified();
       } else
         strcopy(editor_result,
-                "Limite de 8191 bytes: texto adicional no insertado.",
+                "8191-byte limit: additional text was not inserted.",
                 sizeof(editor_result));
     }
     dirty = 1;
@@ -2810,9 +2823,9 @@ void gui_mouse(int dx, int dy, int buttons) {
           file_sort = (file_sort + 1) % 3;
           files_scroll = 0;
           last_file = -1;
-          files_message(file_sort == 1   ? "Orden: nombre / A-Z"
-                        : file_sort == 2 ? "Orden: tamano / mayor primero"
-                                         : "Orden: original");
+          files_message(file_sort == 1   ? "Sort: name / A-Z"
+                        : file_sort == 2 ? "Sort: size / largest first"
+                                         : "Sort: original");
         }
         if (page == 5 && mx >= wx + 60 && mx < wx + ww - 18 &&
             my >= wy + 60 && my < wy + wh - 60) {
@@ -2912,8 +2925,8 @@ void gui_mouse(int dx, int dy, int buttons) {
             file_filter[0] = 0;
             files_message(
                 disk_mounted()
-                    ? "Disco BETA / guardado automatico"
-                    : "Local en RAM / instala BETAOS para conservar archivos");
+                    ? "BETA disk / autosave"
+                    : "Local RAM / install BETAOS to keep files");
           } else if (mx >= wx + 102 && mx < wx + 172) {
             unsigned next =
                 files_usb && usb_total() ? (usb_drive + 1) % usb_total() : 0;
@@ -3088,9 +3101,9 @@ static void draw_window(void) {
   rect(x, y + 41, w, 1, 0x404852);
   icon(page, x + 14, y + 9, ACCENT);
   const char *titles[] = {web_title,         "Terminal",
-                          "Archivos",        "Informacion del sistema",
-                          "Engranajes",      "Editor de codigo",
-                          "Instalar BETAOS", "Aplicaciones ASM"};
+                          "Files",        "System information",
+                          "Gears",      "Code editor",
+                          "Install BETAOS", "ASM applications"};
   char title[65];
   size_t title_cap = (w - 160) / 12;
   if (title_cap > sizeof(title))
@@ -3141,7 +3154,7 @@ static void draw_window(void) {
       if (browser_address_selected)
         rounded(tx - 2, y + 55, tw, 21, 3, 0x295d91);
       ui_label(tx, y + 56,
-               used ? input + begin : "Buscar en Google o escribir direccion",
+               used ? input + begin : "Search Google or enter an address",
                used ? INK : MUTED, 14, tw);
       if (cursor_pos >= begin) {
         char prefix[640];
@@ -3167,7 +3180,7 @@ static void draw_window(void) {
       rounded(x + w - 10, sy, 6, thumb, 3, 0x9da9b8);
     }
     ui_label(x + 12, y + h - 21,
-             draft_overflow[0] ? "Direccion demasiado larga: no se ha enviado"
+             draft_overflow[0] ? "Address too long: not sent"
                                : browser_status(),
              MUTED, 12, w - 24);
   } else if (page == 1) {
@@ -3195,11 +3208,11 @@ static void draw_window(void) {
              : files_usb                 ? usb_path[usb_depth]
                                          : "LOCAL / NAME",
              ACCENT, 1, 130);
-    const char *sort_names[] = {"Original", "Nombre", "Tamano"};
+    const char *sort_names[] = {"Original", "Name", "Size"};
     rounded(x + 160, y + 48, 98, 28, 4, 0x294663);
     ui_label(x + 168, y + 54, sort_names[file_sort], INK, 13, 86);
     if (file_search)
-      text(x + 22, y + 73, "BUSCAR / Enter termina / Esc limpia", MUTED, 1);
+      text(x + 22, y + 73, "SEARCH / Enter finishes / Esc clears", MUTED, 1);
     int selected = files_usb ? usb_selected : selected_file;
     for (int row = files_scroll;
          row < file_order_count && row < files_scroll + visible_rows; row++) {
@@ -3216,8 +3229,8 @@ static void draw_window(void) {
                files_usb && usb_entries[i].directory ? 196 : 236);
       yy += 22;
     }
-    const char *local_actions[] = {"Abrir", "Nuevo", "Nombre", "Borrar"};
-    const char *usb_actions[] = {"Abrir", "Copiar", "Instalar", "Atras"};
+    const char *local_actions[] = {"Open", "New", "Name", "Delete"};
+    const char *usb_actions[] = {"Open", "Copy", "Install", "Back"};
     const char **actions = files_usb ? usb_actions : local_actions;
     int action_width = (w - 320) / 4;
     for (int i = 0; i < 4; i++) {
@@ -3227,23 +3240,23 @@ static void draw_window(void) {
     }
     u32 bytes = 0;
     const char *preview =
-        "Selecciona un archivo para verlo.\nDoble clic o Abrir para "
-        "editar.\nCtrl-N crea un archivo nuevo.\nCtrl-C / Ctrl-V duplica sin "
-        "sobrescribir.\n/ activa la busqueda.";
+        "Select a file to preview.\nDouble-click or Open to "
+        "edit.\nCtrl-N creates a new file.\nCtrl-C / Ctrl-V duplicates without "
+        "overwriting.\n/ opens search.";
     if (files_usb) {
       preview = usb_selected >= 0
                     ? usb_preview_text
-                    : "USB / SOLO LECTURA\nSelecciona un archivo o abre una "
-                      "carpeta.\nCopiar importa texto a Local.\nInstalar "
-                      "agrega un ejecutable BEX a Inicio.\nActualizar "
-                      "detecta nuevas memorias USB.";
+                    : "USB / READ ONLY\nSelect a file or open a "
+                      "folder.\nCopy imports text to Local.\nInstall "
+                      "adds a BEX executable to Start.\nRefresh "
+                      "detects newly connected USB drives.";
       if (usb_selected >= 0)
         bytes = usb_entries[usb_selected].size;
     } else if (selected_file >= 0 && files[selected_file].name[0]) {
       preview = files[selected_file].data;
       bytes = strlen(preview);
     }
-    text(x + 294, y + 91, "VISTA PREVIA", MUTED, 1);
+    text(x + 294, y + 91, "PREVIEW", MUTED, 1);
     char metadata[32], reverse[16];
     unsigned at = 0, n = 0;
     u32 value = bytes;
@@ -3255,7 +3268,7 @@ static void draw_window(void) {
       metadata[at++] = reverse[--n];
     strcopy(metadata + at, " bytes", sizeof(metadata) - at);
     text(x + 420, y + 91, metadata, MUTED, 1);
-    text(x + 294, y + 104, "Ctrl-RePag / Ctrl-AvPag: desplazar vista", MUTED,
+    text(x + 294, y + 104, "Ctrl-PgUp / Ctrl-PgDn: scroll preview", MUTED,
          1);
     int lines = 1, column = 0, columns = (w - 320) / 12;
     for (const char *p = preview; *p; p++) {
@@ -3278,8 +3291,8 @@ static void draw_window(void) {
       file_preview_scroll = max_scroll;
     block_view(x + 294, y + 117, w - 320, h - 210, preview, INK,
                file_preview_scroll);
-    const char *labels[] = {"Local",  "USB >", "Actualizar",
-                            "Copiar", "Pegar", "Buscar"};
+    const char *labels[] = {"Local",  "USB >", "Refresh",
+                            "Copy", "Paste", "Search"};
     const int offsets[] = {22, 102, 182, 294, 404, 514},
               widths[] = {70, 70, 78, 100, 100, 100};
     for (unsigned i = 0; i < 6; i++) {
@@ -3295,8 +3308,8 @@ static void draw_window(void) {
          gears_paused ? "PAUSED" : "RUNNING / NATIVE C RENDERER", ACCENT, 1);
   } else if (page == 6) {
     panel_scroll_by(6, 0);
-    text(x + 22, y + 62, "SELECCIONA UN DISCO SATA / AHCI", INK, 2);
-    text(x + 22, y + 81, "RePag / AvPag para recorrer discos", MUTED, 1);
+    text(x + 22, y + 62, "SELECT A SATA / AHCI DISK", INK, 2);
+    text(x + 22, y + 81, "PgUp / PgDn to browse disks", MUTED, 1);
     for (unsigned i = disk_scroll;
          i < disk_total() && i < (unsigned)(disk_scroll + panel_rows(6)); i++) {
       int yy = y + 95 + (i - disk_scroll) * 33;
@@ -3329,19 +3342,19 @@ static void draw_window(void) {
             "and USB targets are not supported.",
             MUTED);
     text(x + 22, y + h - 159,
-         "ADVERTENCIA: SE BORRARAN TODOS LOS DATOS DEL DISCO.", 0xff8b94, 1);
+         "WARNING: ALL DATA ON THE DISK WILL BE ERASED.", 0xff8b94, 1);
     text(x + 22, y + h - 117,
-         erase_confirmed ? "[X] CONFIRMO EL BORRADO DEL DISCO SELECCIONADO"
-                         : "[ ] CONFIRMO EL BORRADO DEL DISCO SELECCIONADO",
+         erase_confirmed ? "[X] I CONFIRM ERASING THE SELECTED DISK"
+                         : "[ ] I CONFIRM ERASING THE SELECTED DISK",
          INK, 1);
     rounded(x + 22, y + h - 70, 278, 42, 7,
             erase_confirmed && install_target >= 0 ? 0x375f60 : 0x27364a);
-    text(x + 42, y + h - 55, "INSTALAR BETAOS",
+    text(x + 42, y + h - 55, "INSTALL BETAOS",
          erase_confirmed && install_target >= 0 ? ACCENT : MUTED, 2);
   } else if (page == 7) {
     panel_scroll_by(7, 0);
-    text(x + 22, y + 62, "PAQUETES ASM LOCALES / FORMATO BEX", INK, 2);
-    text(x + 22, y + 81, "RePag / AvPag para recorrer paquetes", MUTED, 1);
+    text(x + 22, y + 62, "LOCAL ASM PACKAGES / BEX FORMAT", INK, 2);
+    text(x + 22, y + 81, "PgUp / PgDn to browse packages", MUTED, 1);
     for (unsigned i = package_scroll;
          i < package_total() && i < (unsigned)(package_scroll + panel_rows(7));
          i++) {
@@ -3349,7 +3362,7 @@ static void draw_window(void) {
       rounded(x + 22, yy, w - 44, 40, 6, 0x0e192b);
       text(x + 38, yy + 13, package_name(i), INK, 2);
       rounded(x + w - 190, yy + 5, 165, 30, 5, 0x294958);
-      text(x + w - 174, yy + 15, package_installed(i) ? "QUITAR" : "INSTALAR",
+      text(x + w - 174, yy + 15, package_installed(i) ? "REMOVE" : "INSTALL",
            ACCENT, 1);
     }
     block(x + 22, y + h - 110, w - 44, 85,
@@ -3370,8 +3383,8 @@ static void draw_window(void) {
       editor_column_offset = column;
     if (column >= editor_column_offset + columns)
       editor_column_offset = column - columns + 1;
-    text_fit(x + 18, y + 44, editor_search ? "Buscar:" : editor_name, MUTED, 1, 220);
-    text_fit(x + 110, y + 44, editor_search ? editor_query : "Ctrl-F buscar | Ctrl-S guardar | Ctrl-B compilar | Ctrl-R ejecutar", INK, 1, w - 128);
+    text_fit(x + 18, y + 44, editor_search ? "Search:" : editor_name, MUTED, 1, 220);
+    text_fit(x + 110, y + 44, editor_search ? editor_query : "Ctrl-F search | Ctrl-S save | Ctrl-B build | Ctrl-R run", INK, 1, w - 128);
     rect(x + 52, y + 60 + (cursor_line - first) * 18, w - 70, 18, 0x303b4b);
     const char *src = editor;
     unsigned skip = 0;
@@ -3414,7 +3427,7 @@ static void draw_window(void) {
       rect(x + 60 + (column - editor_column_offset) * 12,
            y + 60 + (cursor_line - first) * 18, 2, 15, INK);
     text(x + 18, y + h - 39,
-         editor_modified ? "* Cambios sin guardar" : editor_name,
+         editor_modified ? "* Unsaved changes" : editor_name,
          editor_modified ? 0xffcc66 : MUTED, 1);
     text_fit(x + 18, y + h - 23, editor_result, MUTED, 1, w - 36);
   } else {
@@ -3435,7 +3448,7 @@ static void draw_window(void) {
   if (page == 1) {
     if (page == 1 && draft_overflow[page])
       text_fit(x + 22, y + h - 77,
-               "Linea demasiado larga: no se ejecutara. Corrige o usa Ctrl-C.",
+               "Line too long: not executed. Edit it or use Ctrl-C.",
                0xff8b94, 1, w - 44);
     rounded(x + 14, y + h - 60, w - 28, 43, 7, 0x0c1627);
     text(x + 26, y + h - 44, page == 0 ? "WEB>" : ">", ACCENT, 2);
@@ -3523,11 +3536,11 @@ void gui_render(void) {
     rect(bend + fb_width / 5, y, fb_width, 1,
          ((24 + t / 3) << 16) | ((65 + t / 2) << 8) | (109 + t));
   }
-  const char *names[] = {"Navegador", "Terminal",   "Archivos",
-                         "Sistema",   "Engranajes", "Editor ASM"};
+  const char *names[] = {"Browser", "Terminal",   "Files",
+                         "System",   "Gears", "ASM Editor"};
   {
     ui_label(fb_width - 235, fb_height - 143, "BETAOS", 0xc1d9f2, 28, 210);
-    ui_label(fb_width - 233, fb_height - 105, "Tu espacio de trabajo", 0x94b4d5,
+    ui_label(fb_width - 233, fb_height - 105, "Your workspace", 0x94b4d5,
              14, 220);
     for (int i = 0; i < 25; i++)
       if (desktop_visible(i)) {
@@ -3585,7 +3598,7 @@ void gui_render(void) {
   if (launcher)
     rect(0, task_y, 100, 52, 0x294663);
   icon(-1, 14, task_y + 14, ACCENT);
-  ui_label(48, task_y + 19, "Inicio", INK, 13, 48);
+  ui_label(48, task_y + 19, "Start", INK, 13, 48);
   for (int i = 0; i < 6; i++) {
     int bx = 100 + i * 64, hover = mx >= bx && mx < bx + 64 && my >= task_y;
     if (page == i || hover)
@@ -3603,7 +3616,7 @@ void gui_render(void) {
   uptime_text(clock, second);
   rounded(fb_width - 211, task_y + 22, 7, 7, 3,
           net_ready() ? ACCENT : 0xefab65);
-  text(fb_width - 195, task_y + 24, net_ready() ? "CONECTADO" : "SIN RED",
+  text(fb_width - 195, task_y + 24, net_ready() ? "CONNECTED" : "OFFLINE",
        MUTED, 1);
   u32 utc_day, utc_second;
   if (platform_utc(&utc_day, &utc_second))
@@ -3617,7 +3630,7 @@ void gui_render(void) {
   if (launcher) {
     int menu_y = task_y - 388;
     rounded(8, menu_y, 340, 388, 5, 0x262d38);
-    ui_label(28, menu_y + 21, "Aplicaciones", INK, 22, 280);
+    ui_label(28, menu_y + 21, "Applications", INK, 22, 280);
     for (int i = 0; i < 6; i++) {
       int yy = menu_y + 66 + i * 44;
       if (mx >= 8 && mx < 348 && my >= yy && my < yy + 44)
@@ -3626,17 +3639,17 @@ void gui_render(void) {
       ui_label(76, yy + 13, names[i], INK, 16, 250);
     }
     rounded(20, menu_y + 338, 150, 38, 4, 0x294663);
-    text(35, menu_y + 352, "APPS ASM", INK, 1);
+    text(35, menu_y + 352, "ASM APPS", INK, 1);
     rounded(186, menu_y + 338, 150, 38, 4, 0x294663);
-    text(198, menu_y + 352, "INSTALAR SO", INK, 1);
+    text(198, menu_y + 352, "INSTALL OS", INK, 1);
     launcher_build();
     unsigned count = launcher_count;
     rounded(356, menu_y, 340, 388, 5, 0x262d38);
     rounded(368, menu_y + 8, 316, 25, 4, 0x0e192a);
     text_fit(376, menu_y + 15,
-             *launcher_query ? launcher_query : "Buscar apps: escribe aqui",
+             *launcher_query ? launcher_query : "Search apps: type here",
              ACCENT, 1, 290);
-    text(376, menu_y + 38, "Flechas elegir / Enter abrir / Esc salir", MUTED,
+    text(376, menu_y + 38, "Arrows select / Enter opens / Esc closes", MUTED,
          1);
     for (unsigned i = launcher_scroll; i < count && i < launcher_scroll + 7;
          i++) {
@@ -3654,17 +3667,17 @@ void gui_render(void) {
     }
     if (!count)
       text(376, menu_y + 70,
-           *launcher_query ? "Sin resultados. Retroceso para corregir."
-                           : "Instala o compila una app ASM.",
+           *launcher_query ? "No results. Backspace to edit."
+                           : "Install or build an ASM app.",
            MUTED, 1);
-    text(376, menu_y + 352, "< ANTERIOR", MUTED, 1);
-    text(540, menu_y + 352, "SIGUIENTE >", MUTED, 1);
+    text(376, menu_y + 352, "< PREVIOUS", MUTED, 1);
+    text(540, menu_y + 352, "NEXT >", MUTED, 1);
   }
   if (context_open) {
     rounded(context_x + 3, context_y + 4, 230, 175, 4, 0x080f1c);
     rounded(context_x, context_y, 230, 175, 4, 0x24384c);
-    const char *items[] = {"Nuevo archivo", "Cambiar nombre", "Cambiar icono",
-                           "Organizar iconos", "Actualizar"};
+    const char *items[] = {"New file", "Rename", "Change icon",
+                           "Arrange icons", "Refresh"};
     for (int i = 0; i < 5; i++) {
       int yy = context_y + 6 + i * 32;
       if (mx >= context_x && mx < context_x + 230 && my >= yy && my < yy + 32)
@@ -3679,17 +3692,17 @@ void gui_render(void) {
     rounded(px + 5, py + 5, 440, 190, 7, 0x080f1c);
     rounded(px, py, 440, 190, 7, 0x24384c);
     text(px + 22, py + 22,
-         dialog_mode == 4   ? "GUARDAR CAMBIOS?"
-         : dialog_mode == 3 ? "BORRAR ARCHIVO?"
-         : dialog_mode == 1 ? "NUEVO ARCHIVO"
-                            : "CAMBIAR NOMBRE",
+         dialog_mode == 4   ? "SAVE CHANGES?"
+         : dialog_mode == 3 ? "DELETE FILE?"
+         : dialog_mode == 1 ? "NEW FILE"
+                            : "RENAME",
          INK, 2);
     rounded(px + 22, py + 64, 396, 35, 4, 0x101b29);
     text(px + 33, py + 76, dialog_text, INK, 1);
     text(px + 33 + strlen(dialog_text) * 6, py + 76, "_", ACCENT, 1);
     text(px + 22, py + 120,
-         dialog_mode == 4 ? "ENTER guardar / D descartar / ESC cancelar"
-                          : "ENTER: aceptar  /  ESC: cancelar",
+         dialog_mode == 4 ? "ENTER save / D discard / ESC cancel"
+                          : "ENTER: accept  /  ESC: cancel",
          MUTED, 1);
     text(px + 22, py + 152, dialog_error, 0xff8b94, 1);
   }

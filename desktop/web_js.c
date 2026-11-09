@@ -52,8 +52,8 @@ static void report(JSValue result) {
     JS_FreeValue(context, error);
     gui_status(
         interrupted
-            ? "JavaScript detenido: limite de tiempo"
-            : "Pagina con errores JavaScript; APIs de navegador limitadas");
+            ? "JavaScript stopped: time limit exceeded"
+            : "Page has JavaScript errors; browser APIs are limited");
   }
   JS_FreeValue(context, result);
 }
@@ -536,7 +536,7 @@ void web_js_reset(void) {
   JS_SetPropertyStr(context, navigator, "userAgent",
                     JS_NewString(context, "BETAOS native browser"));
   JS_SetPropertyStr(context, navigator, "language",
-                    JS_NewString(context, "es"));
+                    JS_NewString(context, "en-US"));
   JS_SetPropertyStr(context, global, "navigator", navigator);
   JS_SetPropertyStr(context, global, "setTimeout",
                     JS_NewCFunctionMagic(context, timer_set, "setTimeout", 2,

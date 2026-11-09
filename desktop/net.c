@@ -647,7 +647,7 @@ void browser_cancel(void) {
   tls_stop();
   dns_wait = 0;
   browser_state = B_IDLE;
-  browser_status_set("Carga cancelada");
+  browser_status_set("Loading canceled");
   serial("HTTP CANCELLED\n");
 }
 static int fail(const char *why) {
@@ -1064,7 +1064,7 @@ static void browser_finish(int complete) {
                      ? meta.length
                      : response_len - meta.end,
                  complete && !response_full ? code : 0);
-    browser_status_set("Recursos procesados / navegador experimental");
+    browser_status_set("Resources loaded / experimental browser");
     return;
   }
   strcopy(web_title, browser_host, sizeof(web_title));
@@ -1086,10 +1086,10 @@ static void browser_finish(int complete) {
     serial(web_text + length - 64);
     serial("\n");
   }
-  browser_status_set(response_full ? "Pagina truncada a 1 MiB"
-                     : complete    ? (secure ? "HTTPS / certificado verificado"
-                                             : "Pagina HTTP cargada")
-                                   : "Respuesta parcial / conexion terminada");
+  browser_status_set(response_full ? "Page truncated at 1 MiB"
+                     : complete    ? (secure ? "HTTPS / certificate verified"
+                                             : "HTTP page loaded")
+                                   : "Partial response / connection closed");
   serial(complete && !response_full ? "HTTP OK: " : "HTTP PARTIAL: ");
   serial(browser_host);
   serial(" / ");
@@ -1123,7 +1123,7 @@ static void send_request(void) {
       request + strlen(request),
       "\r\nUser-Agent: BETAOS/" BETA_VERSION "\r\nAccept: "
       "text/html,application/xhtml+xml,*/*;q=0.8\r\nAccept-Language: "
-      "es,en;q=0.8\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n",
+      "en-US,en;q=0.9\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n",
       sizeof(request_data) - strlen(request));
   request_size = strlen(request);
   request_sent = 0;
@@ -1132,7 +1132,7 @@ static void send_request(void) {
   browser_started = cycles();
   browser_deadline = cycles() + clock_hz * 15;
   last_response_len = 0;
-  browser_status_set("Recibiendo pagina / Esc cancela");
+  browser_status_set("Receiving page / Esc cancels");
 }
 static void browser_step(void) {
   if (browser_state == B_IDLE)
@@ -1192,7 +1192,7 @@ static void browser_step(void) {
         browser_state = B_DNS;
         browser_deadline = now + clock_hz * 3;
         browser_retry = now + clock_hz;
-        browser_status_set("Resolviendo nombre DNS");
+        browser_status_set("Resolving DNS name");
       } else {
         seq = (u32)cycles();
         ack = 0;
@@ -1209,7 +1209,7 @@ static void browser_step(void) {
         browser_state = B_CONNECT;
         browser_deadline = now + clock_hz * 4;
         browser_retry = now + clock_hz;
-        browser_status_set("Conectando TCP / Esc cancela");
+        browser_status_set("Connecting TCP / Esc cancels");
       }
     } else if (now > browser_deadline)
       fail("ARP resolution failed. Gateway or host did not respond.");
@@ -1246,7 +1246,7 @@ static void browser_step(void) {
         }
         browser_state = B_TLS;
         browser_deadline = now + clock_hz * 15;
-        browser_status_set("Negociando TLS / validando certificado");
+        browser_status_set("Negotiating TLS / verifying certificate");
       } else
         send_request();
     } else if (tcp_state < 0 || now > browser_deadline)
@@ -1336,18 +1336,18 @@ static int browser_load_url(const char *url, int redirect) {
   if (!resource_kind)
     strcopy(web_title, host, sizeof(web_title));
   strcopy(web_text,
-          "Cargando pagina... Puedes seguir usando las otras "
-          "aplicaciones.\nEsc cancela la carga.",
+          "Loading page... You can keep using other "
+          "applications.\nEsc cancels loading.",
           sizeof(web_text));
   server_ip = parse_ip(host);
   if (server_ip) {
-    browser_status_set("Buscando host en la red");
+    browser_status_set("Looking for host on the network");
     if (!begin_arp(server_ip, B_HOST_ARP))
       return fail("No route to host.");
   } else {
     if (!dns_ip)
       return fail("No DNS server configured.");
-    browser_status_set("Buscando servidor DNS");
+    browser_status_set("Looking for DNS server");
     if (!begin_arp(dns_ip, B_DNS_ARP))
       return fail("No route to DNS server.");
   }
@@ -1392,7 +1392,7 @@ int browser_load(const char *text) {
     strcopy(document_url, "about:start", sizeof(document_url));
     history_record(document_url);
     web_home();
-    browser_status_set("Listo / Ctrl-L: direccion o busqueda");
+    browser_status_set("Ready / Ctrl-L: address or search");
     return 1;
   }
   if (!*text || !strcmp(text, "google"))
@@ -1409,7 +1409,7 @@ int browser_load(const char *text) {
       strcopy(url, "https://", sizeof(url));
       strcopy(url + 8, text, sizeof(url) - 8);
     } else {
-      strcopy(url, "https://www.google.com/search?gbv=1&udm=14&hl=es&q=",
+      strcopy(url, "https://www.google.com/search?gbv=1&udm=14&hl=en&q=",
               sizeof(url));
       unsigned at = strlen(url);
       const char *hex = "0123456789ABCDEF";
@@ -1455,5 +1455,5 @@ int browser_resource_load(const char *url, int kind, int node) {
   return browser_load_url(url, 0);
 }
 const char *browser_address(void) {
-  return *document_url ? document_url : "Busca en Google o escribe una URL";
+  return *document_url ? document_url : "Search Google or enter a URL";
 }

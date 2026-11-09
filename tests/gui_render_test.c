@@ -211,6 +211,11 @@ int main(int argc, char **argv) {
   memset(gui_canvas, 0, count * 4);
   memset(gui_previous, 255, count * 4);
   gui_init();
+  strcopy(desktop_config.icons[0].label, "Navegador", 32);
+  strcopy(desktop_config.icons[1].label, "My console", 32);
+  translate_default_icons();
+  assert(!strcmp(desktop_config.icons[0].label, "Browser"));
+  assert(!strcmp(desktop_config.icons[1].label, "My console"));
   gui_progress("APP INSTALL FAILED",
                "App storage full. Uninstall an app first.", 1, 1);
   assert(progress_active && progress_failed && progress_percent == 100);

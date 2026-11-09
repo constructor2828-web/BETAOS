@@ -21,7 +21,7 @@ try:
  # Installed list order is hello, then the freshly assembled app demo.
  click(40,742);m.screenshot('start-native-apps');click(460,428)
  m.wait('PROGRAM RETURN: demo',start=offset)
- m.key('f3');click(150,180);m.key('ctrl-c');m.key('ctrl-v');m.wait('FILES: Copia creada.')
+ m.key('f3');click(150,180);m.key('ctrl-c');m.key('ctrl-v');m.wait('FILES: Copy created.')
  m.key('f2');m.type('cat copy01_welcome.txt');m.wait('Welcome to BETAOS')
  m.key('f3');m.key('slash');m.type('demo.asm');m.key('down');m.key('ret');m.wait('UI APP: editor')
  # Opening selected result should pick demo.asm rather than a filtered-out file.

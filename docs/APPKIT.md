@@ -1,39 +1,39 @@
-# Crear aplicaciones para USB
+# Creating apps for USB
 
-El kit utiliza GNU binutils en el equipo de desarrollo. El resultado es código
-máquina x86-64 con cabecera BEX, ejecutado directamente por BETAOS.
+The kit uses GNU binutils on the development machine. It produces x86-64 machine
+code with a BEX header, executed directly by BETAOS.
 
 ```sh
-python3 tools/appkit.py new build/miapp
-# Edita build/miapp/main.S
-python3 tools/appkit.py build build/miapp
+python3 tools/appkit.py new build/myapp
+# Edit build/myapp/main.S
+python3 tools/appkit.py build build/myapp
 ```
 
-Copia `build/miapp/miapp.bex` a un pendrive FAT16 o FAT32 desde tu equipo.
-Expúlsalo normalmente antes de conectarlo a BETAOS. En la terminal del SO:
+Copy `build/myapp/myapp.bex` to a FAT16/FAT32 USB drive from your computer.
+Eject it normally before connecting it to BETAOS. In the OS terminal:
 
 ```text
 usb refresh
 usb ls
-usb install miapp.bex
-run miapp
+usb install myapp.bex
+run myapp
 ```
 
-También puedes seleccionar el BEX en Archivos → USB y pulsar Instalar. La
-aplicación instalada aparece en Inicio. BETAOS lee el USB; no escribe ni formatea
-el dispositivo. El kit no toca dispositivos físicos ni necesita recompilar la ISO.
+You can also select the BEX in Files → USB and click Install. Installed apps
+appear in Start. BETAOS reads the USB drive; it does not write or format it.
+The kit does not touch physical devices or require rebuilding the ISO.
 
-`main.S` usa sintaxis GNU AT&T. El ensamblador integrado del editor utiliza el
-subconjunto Intel documentado en [ASSEMBLER.md](../programs/ASSEMBLER.md); no son
-fuentes intercambiables. Ambos producen el mismo formato BEX.
+`main.S` uses GNU AT&T syntax. The editor's integrated assembler uses the Intel
+subset documented in [ASSEMBLER.md](../programs/ASSEMBLER.md). The source files
+are not interchangeable; both assemblers produce the same BEX format.
 
-Dentro de BETAOS, F6 abre el editor: Ctrl-F busca (Enter encuentra la siguiente
-coincidencia, Esc vuelve a editar), el ratón coloca el cursor, Enter conserva
-la sangría y Ctrl-Z revierte una inserción completa. Ctrl-B compila e instala
-con el nombre del archivo sin extensión; Ctrl-R además ejecuta la aplicación.
-Ctrl-S guarda el fuente. Los límites siguen siendo 8191 bytes por fuente y
-64 KiB por ejecutable. Los programas se ejecutan en modo kernel, sin aislamiento.
+Inside BETAOS, F6 opens the editor. Ctrl-F searches (Enter finds the next match;
+Esc returns to editing), the mouse positions the cursor, Enter preserves
+indentation and Ctrl-Z undoes a complete insertion. Ctrl-B builds and installs
+under the filename without its extension; Ctrl-R also runs the app. Ctrl-S saves
+the source. Limits remain 8191 bytes per source file and 64 KiB per executable
+payload. Programs run in kernel mode without isolation.
 
-Prueba reproducible: `python3 tests/appkit_workflow.py`. Crea un proyecto nuevo,
-lo compila, lo coloca en una imagen FAT de prueba y lo instala y ejecuta mediante
-el controlador USB nativo en QEMU. No utiliza el disco personal del usuario.
+Reproducible test: `python3 tests/appkit_workflow.py`. It creates and builds a
+project, places it in a test FAT image, and installs/runs it through the native
+USB driver in QEMU. It does not use the user's personal disk.

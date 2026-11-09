@@ -7,7 +7,7 @@ for bits,table in [(16,'super'),(16,'gpt'),(32,'mbr'),(32,'gpt')]:
     extra=['-device','qemu-xhci,id=xhci','-drive',f'file={path},if=none,id=stick,format=raw,readonly=on','-device','usb-storage,drive=stick,bus=xhci.0']
     m=Machine(f'usb-{bits}-{table}',extra=extra)
     try:
-        m.wait('USB STORAGE: 0');m.key('f2');m.type('usb ls');m.wait(f'FILES: USB FAT{bits} / solo lectura')
+        m.wait('USB STORAGE: 0');m.key('f2');m.type('usb ls');m.wait(f'FILES: USB FAT{bits} / read-only')
         m.wait('USB FILE: Long filename from USB.txt')
         m.type('usb cat Long filename from USB.txt');m.wait('LFN works')
         m.type('usb cd DOCS');m.wait('USB FILE: NESTED.TXT')
