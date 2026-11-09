@@ -5,7 +5,10 @@ Ctrl-S saves; Ctrl-Z/Ctrl-Y undo and redo up to 16 changes. Arrows preserve the
 column when moving vertically. Home/End act on the line, Ctrl-Home/Ctrl-End on
 the document. Before losing unsaved changes, you can save, discard or cancel.
 Ctrl-F searches; Enter finds the next match and Esc returns to editing. Clicking
-positions the cursor, and Enter preserves indentation.
+positions the cursor, and Enter preserves indentation. Ctrl-A selects the whole
+document; Ctrl-C copies it, Ctrl-X cuts it and Ctrl-V pastes from the editor
+clipboard. Escape or a cursor movement clears the selection. Cut, paste and
+replacement can be undone with Ctrl-Z.
 
 Ctrl-B assembles and installs using the filename without its extension, such as
 `scratch` for `scratch.asm`. Create a file from the desktop context menu and

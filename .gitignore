@@ -9,3 +9,5 @@ disks/*.img
 .aws/
 .env
 .env.*
+
+qa/

@@ -26,7 +26,7 @@ steps=[('build',['make','iso']),('keyboard',['make','test-input']),('fat-parser'
        ('native-sanitizers',['make','test-native-sanitizers']),('network-parser',['make','test-net-parser']),
        ('renderer-sanitizers',['make','test-render-sanitizers']),('web-parser',['make','test-web-parser']),('font',['make','test-font']),('web-images',['make','test-web-images']),
        ('native-https',['python3','tests/https_native.py']),('native-web',['python3','tests/web_native.py']),('browser-comfort',['python3','tests/browser_comfort.py']),('window-manager',['python3','tests/windows08.py']),('desktop',['python3','tests/desktop.py']),
-       ('usability',['python3','tests/usability.py']),('typing-burst',['python3','tests/input_burst.py']),
+       ('usability',['python3','tests/usability.py']),('editor-clipboard',['python3','tests/editor_clipboard.py']),('typing-burst',['python3','tests/input_burst.py']),
        ('desktop-extensions',['python3','tests/desktop_extensions.py']),
        ('daily-workflow',['python3','tests/daily_workflow.py']),
        ('usb-storage',['python3','tests/usb_storage.py']),('usb-variants',['python3','tests/usb_variants.py']),

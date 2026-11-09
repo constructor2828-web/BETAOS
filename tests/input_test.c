@@ -130,6 +130,10 @@ int main(void) {
   input_decode(29);
   input_decode(17);
   expect(128);
+  input_decode(16);
+  expect(137);
+  input_decode(45);
+  expect(138);
   input_decode(157);
   const u8 cycle[] = {29, 56, 57, 184, 157};
   feed(cycle, sizeof(cycle));

@@ -187,6 +187,8 @@ void input_decode(u8 sc) {
         key = 21;
     }
     if (layout == 3) {
+      if (key == 16) key = 30;
+      else if (key == 30) key = 16;
       if (key == 17)
         key = 44;
       else if (key == 44)
@@ -204,6 +206,8 @@ void input_decode(u8 sc) {
       gui_key(14);
     if (key == 46)
       gui_key(24);
+    if (key == 45)
+      gui_key(138);
     if (key == 47)
       gui_key(131);
     if (key == 33)

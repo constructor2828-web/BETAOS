@@ -59,7 +59,8 @@ static int window_drag, window_drag_moved, window_grab_x, window_grab_y,
 static u64 last_title_click;
 static unsigned editor_goal_column = ~0u, editor_column_offset;
 static int editor_modified;
-static int editor_search;
+static int editor_search, editor_selected;
+static char editor_clipboard[8192];
 static char editor_query[96];
 struct EditSnapshot {
   char text[8192];
@@ -1121,7 +1122,7 @@ static void editor_reset_history(void) {
   undo_head = undo_count = redo_count = 0;
   editor_goal_column = ~0u;
   editor_column_offset = 0;
-  editor_search = 0;
+  editor_search = editor_selected = 0;
 }
 static void editor_remember(struct EditSnapshot *state) {
   strcopy(state->text, editor, sizeof(editor));
@@ -1145,6 +1146,7 @@ static void editor_restore_snapshot(const struct EditSnapshot *state) {
   strcopy(editor, state->text, sizeof(editor));
   editor_used = strlen(editor);
   editor_cursor = state->cursor < editor_used ? state->cursor : editor_used;
+  editor_selected = 0;
   editor_goal_column = ~0u;
   editor_refresh_modified();
 }
@@ -2106,6 +2108,75 @@ void gui_key(int c) {
     dirty = 1;
     return;
   }
+  if (page == 5 && !editor_search) {
+    if (c == 137) {
+      editor_selected = editor_used != 0;
+      editor_cursor = editor_used;
+      dirty = 1;
+      return;
+    }
+    if (c == 27 && editor_selected) {
+      editor_selected = 0;
+      dirty = 1;
+      return;
+    }
+    if (c == 24 || c == 138) {
+      if (editor_selected) {
+        strcopy(editor_clipboard, editor, sizeof(editor_clipboard));
+        if (c == 138) {
+          editor_checkpoint();
+          editor[0] = 0;
+          editor_used = editor_cursor = 0;
+          editor_selected = 0;
+          editor_refresh_modified();
+        }
+        strcopy(editor_result, c == 138 ? "Text cut. Ctrl-V to paste." : "Text copied. Ctrl-V to paste.", sizeof(editor_result));
+      } else strcopy(editor_result, "Select text first (Ctrl-A selects all).", sizeof(editor_result));
+      dirty = 1;
+      return;
+    }
+    if (c == 131) {
+      unsigned length = strlen(editor_clipboard);
+      unsigned kept = editor_selected ? 0 : editor_used;
+      if (!length) strcopy(editor_result, "Text clipboard is empty.", sizeof(editor_result));
+      else if (length >= sizeof(editor) - kept)
+        strcopy(editor_result, "Paste exceeds 8191 bytes; text unchanged.", sizeof(editor_result));
+      else {
+        /* Check capacity before changing the selection or recording undo. */
+        editor_checkpoint();
+        if (editor_selected) editor_used = editor_cursor = 0;
+        editor[editor_used] = 0;
+        memmove(editor + editor_cursor + length, editor + editor_cursor,
+                editor_used - editor_cursor + 1);
+        memcpy(editor + editor_cursor, editor_clipboard, length);
+        editor_cursor += length;
+        editor_used += length;
+        editor_selected = 0;
+        editor_goal_column = ~0u;
+        editor_refresh_modified();
+        strcopy(editor_result, "Text pasted. Ctrl-Z to undo.", sizeof(editor_result));
+      }
+      dirty = 1;
+      return;
+    }
+    if (editor_selected && (c == 7 || c == 8 || c == 127)) {
+      editor_checkpoint();
+      editor[0] = 0;
+      editor_used = editor_cursor = 0;
+      editor_selected = 0;
+      editor_refresh_modified();
+      dirty = 1;
+      return;
+    }
+    if (editor_selected && (c == 20 || c == 21)) {
+      editor_cursor = c == 20 ? 0 : editor_used;
+      editor_selected = 0;
+      dirty = 1;
+      return;
+    }
+    if (c == 11 || c == 12 || (c >= 16 && c <= 23) || c == 134)
+      editor_selected = 0;
+  }
   if (page == 5 && (c == 134 || editor_search)) {
     unsigned length = strlen(editor_query);
     if (c == 134) {
@@ -2214,16 +2285,22 @@ void gui_key(int c) {
       }
     } else if (c == '\n' || c == '\r' || c == '\t' || (c >= 32 && c < 127) ||
                (c >= 160 && c <= 255)) {
-      unsigned line_start = editor_cursor;
+      unsigned insertion = editor_selected ? 0 : editor_cursor;
+      unsigned line_start = insertion;
       while (line_start && editor[line_start - 1] != '\n')
         line_start--;
       unsigned indent = 0;
       if (c == '\n' || c == '\r')
-        while (line_start + indent < editor_cursor &&
+        while (line_start + indent < insertion &&
                editor[line_start + indent] == ' ') indent++;
-      unsigned count = c == '\t' ? 4 - ((editor_cursor - line_start) % 4) : 1 + indent;
-      if (editor_used + count < sizeof(editor)) {
+      unsigned count = c == '\t' ? 4 - ((insertion - line_start) % 4) : 1 + indent;
+      if ((editor_selected ? 0 : editor_used) + count < sizeof(editor)) {
         editor_checkpoint();
+        if (editor_selected) {
+          editor_used = editor_cursor = 0;
+          editor[0] = 0;
+          editor_selected = 0;
+        }
         for (unsigned n = 0; n < count; n++) {
           for (unsigned i = editor_used + 1; i > editor_cursor; i--)
             editor[i] = editor[i - 1];
@@ -2839,6 +2916,7 @@ void gui_mouse(int dx, int dy, int buttons) {
           unsigned column = editor_column_offset + (mx - wx - 60) / 12;
           while (column-- && editor[at] && editor[at] != '\n') at++;
           editor_cursor = at;
+          editor_selected = 0;
           editor_goal_column = ~0u;
           editor_search = 0;
         }
@@ -3229,7 +3307,7 @@ static void draw_window(void) {
                files_usb && usb_entries[i].directory ? 196 : 236);
       yy += 22;
     }
-    const char *local_actions[] = {"Open", "New", "Name", "Delete"};
+    const char *local_actions[] = {"Open", "New", "Rename", "Delete"};
     const char *usb_actions[] = {"Open", "Copy", "Install", "Back"};
     const char **actions = files_usb ? usb_actions : local_actions;
     int action_width = (w - 320) / 4;
@@ -3384,7 +3462,7 @@ static void draw_window(void) {
     if (column >= editor_column_offset + columns)
       editor_column_offset = column - columns + 1;
     text_fit(x + 18, y + 44, editor_search ? "Search:" : editor_name, MUTED, 1, 220);
-    text_fit(x + 110, y + 44, editor_search ? editor_query : "Ctrl-F search | Ctrl-S save | Ctrl-B build | Ctrl-R run", INK, 1, w - 128);
+    text_fit(x + 250, y + 44, editor_search ? editor_query : "Ctrl-A select | Ctrl-C copy | Ctrl-V paste | Ctrl-F search", INK, 1, w - 268);
     rect(x + 52, y + 60 + (cursor_line - first) * 18, w - 70, 18, 0x303b4b);
     const char *src = editor;
     unsigned skip = 0;
@@ -3412,6 +3490,7 @@ static void draw_window(void) {
       const char *v = buf;
       while (*v == ' ')
         v++;
+      if (editor_selected) rect(x + 60, yy, n ? n * 12 : 6, 18, 0x315b86);
       text(x + 60, yy, buf,
            *v == ';'           ? MUTED
            : starts(v, "msg:") ? 0xffcc66

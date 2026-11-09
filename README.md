@@ -187,7 +187,9 @@ runs it. Errors include line numbers. Terminal also accepts `edit FILE` and
 
 The editor has 16 undo/redo steps (Ctrl-Z/Ctrl-Y), vertical navigation preserving
 the column, Home/End for the line, Ctrl-Home/Ctrl-End for the document, Tab
-indentation, automatic indentation, horizontal scrolling and Ctrl-F search.
+indentation, automatic indentation, horizontal scrolling and Ctrl-F search. Ctrl-A selects all
+text; Ctrl-C copies, Ctrl-X cuts and Ctrl-V pastes within the editor. Pasting is
+undoable and refuses content beyond the file size limit without changing the text.
 Before closing or replacing modified text, it offers Save, Discard or Cancel.
 
 The assembler implements an Intel x86-64 **subset**, not full NASM syntax:
@@ -305,11 +307,9 @@ python3 tools/profile_iso.py 800x600
 Local QEMU TCG measurements showed idle CPU falling from about 100% to 2.5–3%.
 Regional gear repainting raised measured animation from about 53 to 57 fps and
 reduced active CPU from about 100% to 46% in the same configuration. These are
-results from that environment, not hardware-independent guarantees. See the
-[quality report](qa/QUALITY.md), measurement JSON files and historical
-`qa/latest-results.json`. `perf` and `netstats` expose diagnostic counters.
-Revision-specific results are in `qa/revision-results.json`; the English-language
-update has its own report in `qa/english-results.json`.
+results from that environment, not hardware-independent guarantees. `make qa`
+writes local reports and measurements to `qa/`, which is ignored by Git.
+`perf` and `netstats` expose diagnostic counters.
 
 ## Tests
 
