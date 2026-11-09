@@ -1,0 +1,22 @@
+{
+  "gear_frames_per_second": 55.71,
+  "active_gears_qemu_host_cpu_percent": 48.03,
+  "idle_qemu_host_cpu_percent": 3.5,
+  "command_response_median_ms": 1.226,
+  "command_response_max_ms": 6.575,
+  "response_samples_ms": [
+    5.89,
+    6.069,
+    1.226,
+    0.968,
+    1.225,
+    6.575,
+    1.195,
+    6.03,
+    6.49,
+    0.888,
+    0.944,
+    0.912
+  ],
+  "environment": "QEMU TCG, q35, 512 MiB, headless, default GOP"
+}

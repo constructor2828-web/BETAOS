@@ -9,6 +9,17 @@ Es un prototipo funcional: arranca por UEFI, ofrece escritorio gráfico, ejecuta
 programas ASM nativos y puede instalarse en un disco SATA compatible. Las pruebas
 se realizan en QEMU; el hardware físico no se ha validado.
 
+## Editor y aplicaciones USB
+
+El editor permite buscar con Ctrl-F, colocar el cursor con el ratón y mantener
+la sangría al pulsar Enter. Ctrl-B compila con el nombre del archivo; Ctrl-R
+compila y ejecuta. El [App Kit](docs/APPKIT.md) crea aplicaciones BEX en el equipo
+de desarrollo para copiarlas a un USB FAT16/FAT32 e instalarlas en BETAOS.
+
+El navegador ejecuta JavaScript con QuickJS. Se han corregido dependencias entre
+scripts externos e internos, `defer`, `window.onload` y el orden de las hojas CSS.
+La compatibilidad sigue siendo parcial; [WEB.md](docs/WEB.md) detalla los límites.
+
 ## Compilar y arrancar
 
 Requisitos: GCC, GNU binutils con `i386pep`, GNU Make, Python 3 y mkisofs/genisoimage

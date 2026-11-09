@@ -1,0 +1,20 @@
+{
+  "idle_qemu_host_cpu_percent": 3.0,
+  "command_response_median_ms": 2.444,
+  "command_response_max_ms": 6.845,
+  "response_samples_ms": [
+    6.127,
+    6.236,
+    6.845,
+    0.933,
+    2.947,
+    6.407,
+    1.197,
+    0.988,
+    1.339,
+    0.979,
+    1.941,
+    6.696
+  ],
+  "environment": "QEMU TCG, q35, 512 MiB, headless, default GOP"
+}
