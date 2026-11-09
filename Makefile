@@ -72,17 +72,17 @@ build/64/math/%.o: vendor/openlibm/src/%.c Makefile
 	objcopy --remove-section .comment --remove-section .note.gnu.property $@
 build/64/libmath.a: $(MATH_OBJ)
 	ar rcs $@ $^
-build/64/js_runtime.o: desktop/js_runtime.c desktop/os.h vendor/stb/stb_sprintf.h Makefile
+build/64/js_runtime.o: desktop/js_runtime.c desktop/os.h vendor/stb/stb_sprintf.h Makefile | build/64
 	$(CC) $(FLOAT_CFLAGS) -w -Ivendor/stb -c $< -o $@
 	objcopy --remove-section .comment --remove-section .note.gnu.property $@
-build/64/web_js.o: desktop/web_js.c desktop/web.h desktop/os.h vendor/quickjs/quickjs.h Makefile
-	$(CC) $(FLOAT_CFLAGS) -Ivendor/quickjs -c $< -o $@
+build/64/web_js.o: desktop/web_js.c desktop/web.h desktop/os.h vendor/quickjs/quickjs.h Makefile | build/64
+	$(CC) $(FLOAT_CFLAGS) -Werror -isystem vendor/quickjs -c $< -o $@
 	objcopy --remove-section .comment --remove-section .note.gnu.property $@
-build/64/web_image.o: desktop/web_image.c desktop/web.h desktop/os.h vendor/stb/stb_image.h Makefile
+build/64/web_image.o: desktop/web_image.c desktop/web.h desktop/os.h vendor/stb/stb_image.h Makefile | build/64
 	$(CC) $(FLOAT_CFLAGS) -w -Ivendor/stb -c $< -o $@
 	objcopy --remove-section .comment --remove-section .note.gnu.property $@
 build/64/web.o: desktop/web.h desktop/web_style.inc desktop/web_layout.inc
-build/64/font.o: desktop/font.c desktop/os.h vendor/stb/stb_truetype.h Makefile
+build/64/font.o: desktop/font.c desktop/os.h vendor/stb/stb_truetype.h Makefile | build/64
 	$(CC) $(FLOAT_CFLAGS) -w -Ivendor/stb -c $< -o $@
 	objcopy --remove-section .comment --remove-section .note.gnu.property $@
 build/64/font_blob.S: assets/fonts/Desktop.ttf assets/fonts/Interface.ttf tools/embed_font.py | build/64

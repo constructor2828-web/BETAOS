@@ -19,6 +19,7 @@ CSS = b'''body {background:#edf2fb;color:#162c50;font-size:16px;padding:18px}
 h1 {color:#2463de;font-size:28px} #card {background:#ffffff;padding:18px;
 border:1px solid #a6bce0;border-radius:12px;margin:12px} button {background:#2463de;color:white;padding:10px}'''
 JS = b'''
+if(location.href !== 'http://10.0.2.100/') throw Error('location getter');
 const result = document.getElementById('result');
 result.textContent = 'Real JavaScript, real DOM';
 result.style.color = '#165bc5';
@@ -62,6 +63,8 @@ def server():
             elif path == '/app.js': body, content_type = JS, b'text/javascript'
             elif path == '/data.json': body, content_type = b'{"answer":42}', b'application/json'
             elif path.startswith('/search?'): body = b'<h1>WEB_FORM_OK</h1>'
+            elif path == '/location': body = b"<script>location.href='/location-done'</script>"
+            elif path == '/location-done': body = b'<p>WEB_LOCATION_OK</p>'
             elif path == '/loop': body = b'<script>while(true){}</script><p>WEB_TIMEOUT_RECOVERED</p>'
             else: body = HTML
             wire = b'HTTP/1.1 200 OK\r\nContent-Type: '+content_type+b'\r\nContent-Length: '+str(len(body)).encode()+b'\r\n\r\n'+body
@@ -76,6 +79,8 @@ try:
     m.key('tab'); m.key('ret'); m.wait('WEB_CLICK_OK')
     m.key('tab'); m.type('native search'); m.wait('WEB_FORM_OK')
     assert '/search?q=native%20search' in requests, requests
+    m.key('ctrl-l'); m.type('http://10.0.2.100/location'); m.wait('WEB_LOCATION_OK')
+    assert '/location-done' in requests, requests
     m.key('ctrl-l'); m.type('http://10.0.2.100/loop')
     m.wait('interrupted'); m.wait('WEB_TIMEOUT_RECOVERED')
     m.key('f2'); m.type('echo after-js-timeout'); m.wait('CMD: echo after-js-timeout')

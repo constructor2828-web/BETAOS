@@ -442,6 +442,10 @@ static const JSCFunctionListEntry node_functions[] = {
     JS_CGETSET_MAGIC_DEF("tagName", node_get, 0, 15),
     JS_CGETSET_MAGIC_DEF("childNodes", node_get, 0, 16),
     JS_CGETSET_MAGIC_DEF("children", node_get, 0, 17)};
+static const JSCFunctionListEntry location_functions[] = {
+    JS_CGETSET_DEF("href", location_get, location_set),
+    JS_CFUNC_DEF("assign", 1, location_assign),
+    JS_CFUNC_DEF("replace", 1, location_assign)};
 static const JSCFunctionListEntry document_functions[] = {
     JS_CFUNC_MAGIC_DEF("getElementById", 1, method_find, 0),
     JS_CFUNC_MAGIC_DEF("querySelector", 1, method_find, 1),
@@ -509,16 +513,9 @@ void web_js_reset(void) {
       context, global, "addEventListener",
       JS_NewCFunction(context, method_listen, "addEventListener", 2));
   JSValue loc = JS_NewObject(context);
-  JS_DefinePropertyGetSet(context, loc, JS_NewAtom(context, "href"),
-                          JS_NewCFunction2(context, (JSCFunction *)location_get,
-                                           "get href", 0, JS_CFUNC_getter, 0),
-                          JS_NewCFunction2(context, (JSCFunction *)location_set,
-                                           "set href", 1, JS_CFUNC_setter, 0),
-                          JS_PROP_CONFIGURABLE);
-  JS_SetPropertyStr(context, loc, "assign",
-                    JS_NewCFunction(context, location_assign, "assign", 1));
-  JS_SetPropertyStr(context, loc, "replace",
-                    JS_NewCFunction(context, location_assign, "replace", 1));
+  JS_SetPropertyFunctionList(context, loc, location_functions,
+                             sizeof(location_functions) /
+                                 sizeof(location_functions[0]));
   JS_SetPropertyStr(context, global, "location", loc);
   JSValue console = JS_NewObject(context);
   JS_SetPropertyStr(context, console, "log",
