@@ -1,0 +1,11 @@
+build/
+__pycache__/
+
+disks/*.img
+
+# Local agent/account state must never enter a public source archive.
+.agents/
+.codex/
+.aws/
+.env
+.env.*

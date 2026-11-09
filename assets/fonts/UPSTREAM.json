@@ -1,0 +1,18 @@
+{
+  "fonts": [
+    {
+      "file": "Desktop.ttf",
+      "upstream": "https://github.com/iaolo/iA-Fonts",
+      "sha256": "929605302a57250e712908cb5f6e1ce80c7d0accd5fd2555345f29a5e8d4e30b",
+      "license": "LICENSE.md",
+      "modified": false
+    },
+    {
+      "file": "Interface.ttf",
+      "upstream": "https://github.com/liberationfonts/liberation-fonts",
+      "sha256": "baccc64becc3eb7d104b7c84d99f5314a0a1f896e2b3ea6c2f22fc08d2003bee",
+      "license": "Interface-LICENSE.txt",
+      "modified": false
+    }
+  ]
+}

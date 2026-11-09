@@ -1,0 +1,1126 @@
+{
+  "upstream": "https://github.com/JuliaMath/openlibm",
+  "commit": "5fe399749f9276eaa0b8403e507470da05cbbb3f",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d76019ef1d1e038a7d43b3389cdb23789896651d",
+      "size": 5857,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/d76019ef1d1e038a7d43b3389cdb23789896651d"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d543a3bc9770c0fdfd4d1305b678a10c13a2adfe",
+      "size": 2581,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/d543a3bc9770c0fdfd4d1305b678a10c13a2adfe"
+    },
+    {
+      "path": "amd64/bsd_asm.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9c815b14f82102b662de4c58b7e99f84a8675dc",
+      "size": 3648,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b9c815b14f82102b662de4c58b7e99f84a8675dc"
+    },
+    {
+      "path": "amd64/bsd_fpu.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "513b3456f923bc3663ea16c89db9032e6d576a66",
+      "size": 6925,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/513b3456f923bc3663ea16c89db9032e6d576a66"
+    },
+    {
+      "path": "amd64/bsd_ieeefp.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6103d506451eaa63554720d2abe782f069ebb9f4",
+      "size": 7988,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/6103d506451eaa63554720d2abe782f069ebb9f4"
+    },
+    {
+      "path": "include/openlibm.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d85194538b3ce0f230f7cadd87bc235d33420ade",
+      "size": 149,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/d85194538b3ce0f230f7cadd87bc235d33420ade"
+    },
+    {
+      "path": "include/openlibm_complex.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7afc992e1f709fd70b48e39f3cb1da990d5cbc90",
+      "size": 6000,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/7afc992e1f709fd70b48e39f3cb1da990d5cbc90"
+    },
+    {
+      "path": "include/openlibm_defs.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a6fa6b5bcab946b489d27b411b0daa7ed148b69",
+      "size": 298,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8a6fa6b5bcab946b489d27b411b0daa7ed148b69"
+    },
+    {
+      "path": "include/openlibm_fenv.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35a5586f357c04ed7b4412a1af0a932584751a17",
+      "size": 722,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/35a5586f357c04ed7b4412a1af0a932584751a17"
+    },
+    {
+      "path": "include/openlibm_fenv_aarch64.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5cf0e49b0dfb139714da314e688636e3e82b783b",
+      "size": 5476,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/5cf0e49b0dfb139714da314e688636e3e82b783b"
+    },
+    {
+      "path": "include/openlibm_fenv_amd64.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6db210e49012ca61c87f6c4714fbc0ad63535e1",
+      "size": 6193,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/c6db210e49012ca61c87f6c4714fbc0ad63535e1"
+    },
+    {
+      "path": "include/openlibm_fenv_arm.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8223a01d8e55ea734b6da95e44c1373d6a7eef53",
+      "size": 5247,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8223a01d8e55ea734b6da95e44c1373d6a7eef53"
+    },
+    {
+      "path": "include/openlibm_fenv_i387.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec4eb87cabbefb1c7dc0e50797f0f163c2ba45f5",
+      "size": 7126,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/ec4eb87cabbefb1c7dc0e50797f0f163c2ba45f5"
+    },
+    {
+      "path": "include/openlibm_fenv_loongarch64.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfaf020755d213611a1d2141f472041da78bfa1a",
+      "size": 4988,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/cfaf020755d213611a1d2141f472041da78bfa1a"
+    },
+    {
+      "path": "include/openlibm_fenv_mips.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "980252f7edd3c4a85c2b6ed8d4d058936deecec6",
+      "size": 5969,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/980252f7edd3c4a85c2b6ed8d4d058936deecec6"
+    },
+    {
+      "path": "include/openlibm_fenv_powerpc.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7592de86c599e95f7fcdd3b17a1d9ff9a7a4b94d",
+      "size": 6850,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/7592de86c599e95f7fcdd3b17a1d9ff9a7a4b94d"
+    },
+    {
+      "path": "include/openlibm_fenv_riscv.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b493c0e12ca40d037ae7afc166c46fc6655105f1",
+      "size": 5873,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b493c0e12ca40d037ae7afc166c46fc6655105f1"
+    },
+    {
+      "path": "include/openlibm_fenv_s390.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a21b9ee6af477ab72faec726bcf08a31156b220c",
+      "size": 5215,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a21b9ee6af477ab72faec726bcf08a31156b220c"
+    },
+    {
+      "path": "include/openlibm_math.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "701ad705578141713aad856cac3f3fce1a132b8d",
+      "size": 16233,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/701ad705578141713aad856cac3f3fce1a132b8d"
+    },
+    {
+      "path": "ld80/e_rem_pio2l.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c44ad48ef72fbff98b4e89a391f2e16797b82830",
+      "size": 4722,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/c44ad48ef72fbff98b4e89a391f2e16797b82830"
+    },
+    {
+      "path": "ld80/invtrig.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d543e9441ca8af1210972e4160778c446ab1d2f",
+      "size": 3288,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/3d543e9441ca8af1210972e4160778c446ab1d2f"
+    },
+    {
+      "path": "src/aarch64_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1fdc63e91091dca6db0795a198eab27beaaa74e",
+      "size": 2162,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/e1fdc63e91091dca6db0795a198eab27beaaa74e"
+    },
+    {
+      "path": "src/amd64_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41b01c3d39594c7a890e177ad8375c616b7dfc43",
+      "size": 2031,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/41b01c3d39594c7a890e177ad8375c616b7dfc43"
+    },
+    {
+      "path": "src/bsd_cdefs.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "579919304ea413e0c31c89d127e7c92636079bf6",
+      "size": 3825,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/579919304ea413e0c31c89d127e7c92636079bf6"
+    },
+    {
+      "path": "src/cdefs-compat.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "834c5478a391bb55812f9f25454040edc97fde85",
+      "size": 3504,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/834c5478a391bb55812f9f25454040edc97fde85"
+    },
+    {
+      "path": "src/common.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b02d697d80bfa594b51116cf83a7531958cd9b2b",
+      "size": 108,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b02d697d80bfa594b51116cf83a7531958cd9b2b"
+    },
+    {
+      "path": "src/e_acos.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7295ad649b0b1c8ff1571406900d46a9d5c694ef",
+      "size": 3558,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/7295ad649b0b1c8ff1571406900d46a9d5c694ef"
+    },
+    {
+      "path": "src/e_acosh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e783a68792432461fc42f14bb20f60ad76d3d7d",
+      "size": 1770,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1e783a68792432461fc42f14bb20f60ad76d3d7d"
+    },
+    {
+      "path": "src/e_asin.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e287bf1cf287695febc0b4810e76fd452df281e8",
+      "size": 3738,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/e287bf1cf287695febc0b4810e76fd452df281e8"
+    },
+    {
+      "path": "src/e_atan2.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9b021b92d88f4ad2efd1b110406300e750a76352",
+      "size": 3913,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9b021b92d88f4ad2efd1b110406300e750a76352"
+    },
+    {
+      "path": "src/e_atan2f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a52a5815922bd82045f3b22d0a580271089bf530",
+      "size": 2772,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a52a5815922bd82045f3b22d0a580271089bf530"
+    },
+    {
+      "path": "src/e_atan2l.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c0a79688ec417626eff02df14b2eff5fd01c7a9",
+      "size": 3586,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1c0a79688ec417626eff02df14b2eff5fd01c7a9"
+    },
+    {
+      "path": "src/e_atanh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e1db914ca2f231df7e29e496bcc198e3168b339",
+      "size": 1776,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/5e1db914ca2f231df7e29e496bcc198e3168b339"
+    },
+    {
+      "path": "src/e_cosh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e76570611e383210be25be8fba90a74f9e28a06",
+      "size": 2364,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/2e76570611e383210be25be8fba90a74f9e28a06"
+    },
+    {
+      "path": "src/e_exp.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "639b9fe18dbae273d3182146bb9aebbd59c9e362",
+      "size": 5617,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/639b9fe18dbae273d3182146bb9aebbd59c9e362"
+    },
+    {
+      "path": "src/e_fmod.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "285da8da2323f26a76f0c4b1153ff579ef846403",
+      "size": 3396,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/285da8da2323f26a76f0c4b1153ff579ef846403"
+    },
+    {
+      "path": "src/e_hypot.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3f4c1d140fb620f5a78f2caa095916b96d27cc97",
+      "size": 3449,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/3f4c1d140fb620f5a78f2caa095916b96d27cc97"
+    },
+    {
+      "path": "src/e_j0.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2419d3c1c97dc583aa7a3767b3ff134aa20a712",
+      "size": 14851,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a2419d3c1c97dc583aa7a3767b3ff134aa20a712"
+    },
+    {
+      "path": "src/e_j0f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "62258b1a88b6946cc02b8f24d72af5886394f706",
+      "size": 10544,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/62258b1a88b6946cc02b8f24d72af5886394f706"
+    },
+    {
+      "path": "src/e_j1.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4be57cd2474ca2e8324f4b5f6e20bc5cd5dce94e",
+      "size": 14619,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/4be57cd2474ca2e8324f4b5f6e20bc5cd5dce94e"
+    },
+    {
+      "path": "src/e_j1f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac32c6fd68881de9ef261ab372f8e54a5026a2cf",
+      "size": 10238,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/ac32c6fd68881de9ef261ab372f8e54a5026a2cf"
+    },
+    {
+      "path": "src/e_jn.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a5396572d4949388e2fb09cde81def276cfff3d",
+      "size": 7268,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1a5396572d4949388e2fb09cde81def276cfff3d"
+    },
+    {
+      "path": "src/e_lgamma.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3167964be9a448e252e3f1d4dcc494353f52464",
+      "size": 857,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/d3167964be9a448e252e3f1d4dcc494353f52464"
+    },
+    {
+      "path": "src/e_lgamma_r.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd936ebfadf4b71f4d7143bdf4c44b1d8a24d8ab",
+      "size": 11154,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/fd936ebfadf4b71f4d7143bdf4c44b1d8a24d8ab"
+    },
+    {
+      "path": "src/e_lgammaf_r.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "feba1ae8a056ceb98fe096e4db470ac3356dddde",
+      "size": 7410,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/feba1ae8a056ceb98fe096e4db470ac3356dddde"
+    },
+    {
+      "path": "src/e_log.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29584bb9bf400da654bcfbec4fb7936ff27f09d9",
+      "size": 4589,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/29584bb9bf400da654bcfbec4fb7936ff27f09d9"
+    },
+    {
+      "path": "src/e_log10.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e3c4e08648bfc722485763302f8f82c96c6a78b",
+      "size": 2627,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8e3c4e08648bfc722485763302f8f82c96c6a78b"
+    },
+    {
+      "path": "src/e_log10f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f6e31a2f0bc851f4663e6df863fb28c2de1ce6c",
+      "size": 2062,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1f6e31a2f0bc851f4663e6df863fb28c2de1ce6c"
+    },
+    {
+      "path": "src/e_log2.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15702332477bab5133cb5472fc7084866f05472b",
+      "size": 3785,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/15702332477bab5133cb5472fc7084866f05472b"
+    },
+    {
+      "path": "src/e_log2f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "58977ac3b7a5c8b41726a140021375e3c0dbda2f",
+      "size": 2508,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/58977ac3b7a5c8b41726a140021375e3c0dbda2f"
+    },
+    {
+      "path": "src/e_pow.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a891552364c296685ffa2501f06d00d4b82b61f7",
+      "size": 10330,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a891552364c296685ffa2501f06d00d4b82b61f7"
+    },
+    {
+      "path": "src/e_rem_pio2.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c09e38a3640f8b8b91faf69444db529542727671",
+      "size": 5016,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/c09e38a3640f8b8b91faf69444db529542727671"
+    },
+    {
+      "path": "src/e_rem_pio2f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9861bb9dc6ba6365d4c834a568deaaef236eeb9f",
+      "size": 2211,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9861bb9dc6ba6365d4c834a568deaaef236eeb9f"
+    },
+    {
+      "path": "src/e_remainder.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a72631c4ed71c923316ebb494d5a7e750352aa5f",
+      "size": 1914,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a72631c4ed71c923316ebb494d5a7e750352aa5f"
+    },
+    {
+      "path": "src/e_sinh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f3a2bff3d42e5fad2d6c3635a98c0c213f7d492",
+      "size": 2176,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/7f3a2bff3d42e5fad2d6c3635a98c0c213f7d492"
+    },
+    {
+      "path": "src/e_sqrt.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2eb4a1a66d76bf5938c497c92eb93a4dec5d8fbc",
+      "size": 14554,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/2eb4a1a66d76bf5938c497c92eb93a4dec5d8fbc"
+    },
+    {
+      "path": "src/fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb824d709337319122013608f498ef9358fc321b",
+      "size": 3705,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/eb824d709337319122013608f498ef9358fc321b"
+    },
+    {
+      "path": "src/i386_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "455631ca00f2d80c0ea05d330bede2adca544bd1",
+      "size": 2008,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/455631ca00f2d80c0ea05d330bede2adca544bd1"
+    },
+    {
+      "path": "src/k_cos.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f3054ef8a1214754f30d137e84cc67e67bd896d4",
+      "size": 2902,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/f3054ef8a1214754f30d137e84cc67e67bd896d4"
+    },
+    {
+      "path": "src/k_exp.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4739e200821cd5e4cda33ff21a7c1cd7b0aff516",
+      "size": 3682,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/4739e200821cd5e4cda33ff21a7c1cd7b0aff516"
+    },
+    {
+      "path": "src/k_log.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0943c400a608da86a9148b69dd0c0be6d4ce1ac",
+      "size": 3482,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a0943c400a608da86a9148b69dd0c0be6d4ce1ac"
+    },
+    {
+      "path": "src/k_logf.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b665ae23895345df9b0909ea9b69bf26c46f615",
+      "size": 1059,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1b665ae23895345df9b0909ea9b69bf26c46f615"
+    },
+    {
+      "path": "src/k_rem_pio2.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9555d3ab5257717a20b33151db47d7d495582f00",
+      "size": 15979,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9555d3ab5257717a20b33151db47d7d495582f00"
+    },
+    {
+      "path": "src/k_sin.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b3de3943807079fe5ed96262a6047199635227f",
+      "size": 2412,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/0b3de3943807079fe5ed96262a6047199635227f"
+    },
+    {
+      "path": "src/k_tan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41f754ba0c77fba31d9f0a42d591762d98e8100f",
+      "size": 4104,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/41f754ba0c77fba31d9f0a42d591762d98e8100f"
+    },
+    {
+      "path": "src/loongarch64_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31ea13100439c1a7e7dc0cc1b0155a6c3f262240",
+      "size": 1974,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/31ea13100439c1a7e7dc0cc1b0155a6c3f262240"
+    },
+    {
+      "path": "src/math_private.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e066b6c1c638d4016e16f150da19f749201e91a8",
+      "size": 9327,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/e066b6c1c638d4016e16f150da19f749201e91a8"
+    },
+    {
+      "path": "src/math_private_openbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "021670f27cbe5cde7669547b5a10a511d75cb257",
+      "size": 4881,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/021670f27cbe5cde7669547b5a10a511d75cb257"
+    },
+    {
+      "path": "src/mips_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50f119f39f50ad3d2c4fa0ad7116156e0383c8c7",
+      "size": 1947,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/50f119f39f50ad3d2c4fa0ad7116156e0383c8c7"
+    },
+    {
+      "path": "src/powerpc_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d80eb4bdf4e2f542ed4e2649621750ca90cff29",
+      "size": 1810,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/6d80eb4bdf4e2f542ed4e2649621750ca90cff29"
+    },
+    {
+      "path": "src/riscv_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfa85ff2448ec6343e9707f5aafd3886168aca61",
+      "size": 2117,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/cfa85ff2448ec6343e9707f5aafd3886168aca61"
+    },
+    {
+      "path": "src/s390_fpmath.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e7787c03eb64c132506b964da22dd05e1256dee",
+      "size": 1842,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1e7787c03eb64c132506b964da22dd05e1256dee"
+    },
+    {
+      "path": "src/s_asinh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ca7937c3341e1fb910d1e1fd216d0c11d25d20a5",
+      "size": 1781,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/ca7937c3341e1fb910d1e1fd216d0c11d25d20a5"
+    },
+    {
+      "path": "src/s_atan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23a29490b5a974e676c1ace4cea1dcb3c0d66df8",
+      "size": 4276,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/23a29490b5a974e676c1ace4cea1dcb3c0d66df8"
+    },
+    {
+      "path": "src/s_cabs.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "481632aee02faa5b9a3f5efcbb95a2e4f2ad9182",
+      "size": 1157,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/481632aee02faa5b9a3f5efcbb95a2e4f2ad9182"
+    },
+    {
+      "path": "src/s_cacos.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e29717b0f5038d5dae99d4f858b124934dad4d26",
+      "size": 1688,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/e29717b0f5038d5dae99d4f858b124934dad4d26"
+    },
+    {
+      "path": "src/s_cacosh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f16c14ce81805de5f5f3e6ee3c755e4004d74e26",
+      "size": 1578,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/f16c14ce81805de5f5f3e6ee3c755e4004d74e26"
+    },
+    {
+      "path": "src/s_carg.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ebfe177924c0bd68f3149d8bde207e83247375a",
+      "size": 1659,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/2ebfe177924c0bd68f3149d8bde207e83247375a"
+    },
+    {
+      "path": "src/s_casin.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e5daaa71155de4b42b6d2212a6793b7e5a6bfd9",
+      "size": 2889,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/4e5daaa71155de4b42b6d2212a6793b7e5a6bfd9"
+    },
+    {
+      "path": "src/s_casinh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b1154d9a4f3fcc87062a821f5782f80033c0c6b",
+      "size": 1591,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/4b1154d9a4f3fcc87062a821f5782f80033c0c6b"
+    },
+    {
+      "path": "src/s_catan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ee3dbb9ec8456d8f72ea5a4cb7408bfc968b7e5",
+      "size": 2959,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9ee3dbb9ec8456d8f72ea5a4cb7408bfc968b7e5"
+    },
+    {
+      "path": "src/s_catanh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e3eeafe980a974fc1117de1191f416d54e741fe",
+      "size": 1608,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/3e3eeafe980a974fc1117de1191f416d54e741fe"
+    },
+    {
+      "path": "src/s_cbrt.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b6316adabf3f40059b9fe3f74c4a364682915878",
+      "size": 4207,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b6316adabf3f40059b9fe3f74c4a364682915878"
+    },
+    {
+      "path": "src/s_ccos.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "faafdb0488b6edd4f59f86ca66886d8904627d85",
+      "size": 2006,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/faafdb0488b6edd4f59f86ca66886d8904627d85"
+    },
+    {
+      "path": "src/s_ccosh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "110494af5c6af46c085a11c3a3190b9d8b6ba247",
+      "size": 5050,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/110494af5c6af46c085a11c3a3190b9d8b6ba247"
+    },
+    {
+      "path": "src/s_cexp.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1510721373c7930e16f9f923e62936b6ccaf2a6f",
+      "size": 3003,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1510721373c7930e16f9f923e62936b6ccaf2a6f"
+    },
+    {
+      "path": "src/s_cimag.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "456ae99e20fc6c430d692413eea2a8479e1b1780",
+      "size": 1560,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/456ae99e20fc6c430d692413eea2a8479e1b1780"
+    },
+    {
+      "path": "src/s_clog.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6412df78f33f7929a22d7ee89b4a1c3c261443d0",
+      "size": 2089,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/6412df78f33f7929a22d7ee89b4a1c3c261443d0"
+    },
+    {
+      "path": "src/s_conj.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7c09404bf7f6377e6fd661cfe25207b0ef7348c",
+      "size": 1583,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a7c09404bf7f6377e6fd661cfe25207b0ef7348c"
+    },
+    {
+      "path": "src/s_copysign.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a52701f153089862ff885817c4a50578ed45d432",
+      "size": 904,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a52701f153089862ff885817c4a50578ed45d432"
+    },
+    {
+      "path": "src/s_cos.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9896bd8219573bca8359182af131d9ed66f52e69",
+      "size": 2346,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9896bd8219573bca8359182af131d9ed66f52e69"
+    },
+    {
+      "path": "src/s_cpow.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dae6251f6356c3211e05e4a340868b3bc03b6ca5",
+      "size": 2007,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/dae6251f6356c3211e05e4a340868b3bc03b6ca5"
+    },
+    {
+      "path": "src/s_cproj.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9faa24077267dc8d55826cfea81814b72e1157d",
+      "size": 1820,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b9faa24077267dc8d55826cfea81814b72e1157d"
+    },
+    {
+      "path": "src/s_csin.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a905991eab35171098a2c6f763a233bbd9551eb1",
+      "size": 2067,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a905991eab35171098a2c6f763a233bbd9551eb1"
+    },
+    {
+      "path": "src/s_csinh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3838f252258b5ab055529f014ab06c46c657291c",
+      "size": 5074,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/3838f252258b5ab055529f014ab06c46c657291c"
+    },
+    {
+      "path": "src/s_csqrt.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9cf42556c1020978af39fbd1c813666c787fe1da",
+      "size": 3410,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9cf42556c1020978af39fbd1c813666c787fe1da"
+    },
+    {
+      "path": "src/s_ctan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94200959c6bcf6efeefafe6dd332e3e49f69a0d1",
+      "size": 3190,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/94200959c6bcf6efeefafe6dd332e3e49f69a0d1"
+    },
+    {
+      "path": "src/s_ctanh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d452ee2277a55116e04615289bf3b63fc325819",
+      "size": 4402,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8d452ee2277a55116e04615289bf3b63fc325819"
+    },
+    {
+      "path": "src/s_exp2.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d643dbb3d46e6a97ef95fc09a034baa0069f8c42",
+      "size": 14409,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/d643dbb3d46e6a97ef95fc09a034baa0069f8c42"
+    },
+    {
+      "path": "src/s_exp2f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74bc9f36c7d6695e873e45b07cf9df3767b68b79",
+      "size": 4278,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/74bc9f36c7d6695e873e45b07cf9df3767b68b79"
+    },
+    {
+      "path": "src/s_expm1.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "579871465482962e5840d7c4d5a9c299aef258c9",
+      "size": 7420,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/579871465482962e5840d7c4d5a9c299aef258c9"
+    },
+    {
+      "path": "src/s_expm1f.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb7ceec7801d95c4934197984df2c1f94817ffc9",
+      "size": 3556,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/cb7ceec7801d95c4934197984df2c1f94817ffc9"
+    },
+    {
+      "path": "src/s_fabs.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43ffc1abf75f786a13c73d0c5eff62f58e6242ed",
+      "size": 654,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/43ffc1abf75f786a13c73d0c5eff62f58e6242ed"
+    },
+    {
+      "path": "src/s_fdim.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f05347cf409bf9bac4fa747a4ff66fee45c8926",
+      "size": 1832,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/2f05347cf409bf9bac4fa747a4ff66fee45c8926"
+    },
+    {
+      "path": "src/s_floor.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4a44bd5fe06084a0161bf60f2603f7e62ee14df5",
+      "size": 1878,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/4a44bd5fe06084a0161bf60f2603f7e62ee14df5"
+    },
+    {
+      "path": "src/s_fma.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63e529e5ff04663c120ab9ffe6ac1c2e06a513c7",
+      "size": 8051,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/63e529e5ff04663c120ab9ffe6ac1c2e06a513c7"
+    },
+    {
+      "path": "src/s_fmax.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73919c65258117f65623099cccf0c059b6aee57a",
+      "size": 2035,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/73919c65258117f65623099cccf0c059b6aee57a"
+    },
+    {
+      "path": "src/s_fmin.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c527397d1cd7be6b5cbdd3d7d11c50b2a0cbfb3",
+      "size": 2035,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9c527397d1cd7be6b5cbdd3d7d11c50b2a0cbfb3"
+    },
+    {
+      "path": "src/s_fpclassify.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b552e175cde9583d5ee377332654b6b4a2614dc",
+      "size": 2568,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/2b552e175cde9583d5ee377332654b6b4a2614dc"
+    },
+    {
+      "path": "src/s_frexp.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0385acfb366a2ff5732fd56feeb371834c914939",
+      "size": 1439,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/0385acfb366a2ff5732fd56feeb371834c914939"
+    },
+    {
+      "path": "src/s_ilogb.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "897e6d6ddbbea1054d47c1f5d07ec59657b33eaf",
+      "size": 1255,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/897e6d6ddbbea1054d47c1f5d07ec59657b33eaf"
+    },
+    {
+      "path": "src/s_isfinite.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c1187631a47a84f80192e9b97935fc9d98ea17f",
+      "size": 1884,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/7c1187631a47a84f80192e9b97935fc9d98ea17f"
+    },
+    {
+      "path": "src/s_isnan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9066aa5f903d34cb8b0f6f6d21fcd1d176f05a4",
+      "size": 2073,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b9066aa5f903d34cb8b0f6f6d21fcd1d176f05a4"
+    },
+    {
+      "path": "src/s_llrint.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dcd6aed90958aa04997d6ec928122429243248d8",
+      "size": 225,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/dcd6aed90958aa04997d6ec928122429243248d8"
+    },
+    {
+      "path": "src/s_llround.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "717ea96a1a20ee488cd7204fed2c823c5ce46e3e",
+      "size": 285,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/717ea96a1a20ee488cd7204fed2c823c5ce46e3e"
+    },
+    {
+      "path": "src/s_log1p.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1921b6a3b8182b0835371ad1765a97521d01575a",
+      "size": 5798,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1921b6a3b8182b0835371ad1765a97521d01575a"
+    },
+    {
+      "path": "src/s_logb.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "116b69635bcad06a6238f24c8624e8a831ad9a21",
+      "size": 1253,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/116b69635bcad06a6238f24c8624e8a831ad9a21"
+    },
+    {
+      "path": "src/s_lrint.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1c554642e7488a44577fb49c3de4acba705f1b4",
+      "size": 2223,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/e1c554642e7488a44577fb49c3de4acba705f1b4"
+    },
+    {
+      "path": "src/s_lround.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76fa73279a2c76094c2cafd3b59ac97ec6f2664b",
+      "size": 2560,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/76fa73279a2c76094c2cafd3b59ac97ec6f2664b"
+    },
+    {
+      "path": "src/s_nan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dd1c5afd5e511142c80cbc3df766c03d900366d6",
+      "size": 3805,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/dd1c5afd5e511142c80cbc3df766c03d900366d6"
+    },
+    {
+      "path": "src/s_nearbyint.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95162a54cc49cf0ab06bbf652ea84ed6e3b21530",
+      "size": 2157,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/95162a54cc49cf0ab06bbf652ea84ed6e3b21530"
+    },
+    {
+      "path": "src/s_nextafter.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b2ea05fb1dcfe8eab29827fc5b7dc82f3269a65",
+      "size": 2197,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8b2ea05fb1dcfe8eab29827fc5b7dc82f3269a65"
+    },
+    {
+      "path": "src/s_nexttoward.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8729c8f94d1c5461aa416610068450816dc7e4d0",
+      "size": 1896,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8729c8f94d1c5461aa416610068450816dc7e4d0"
+    },
+    {
+      "path": "src/s_remquo.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afc325d9dc2214168e1c7a8d4b41ea33bc54e7b3",
+      "size": 4019,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/afc325d9dc2214168e1c7a8d4b41ea33bc54e7b3"
+    },
+    {
+      "path": "src/s_rint.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f81e6925c3314648453b7196cc73d3fdfa477952",
+      "size": 2486,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/f81e6925c3314648453b7196cc73d3fdfa477952"
+    },
+    {
+      "path": "src/s_round.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a982ec3bb209ac51cdbbc90f00c1164b83b6aeeb",
+      "size": 1823,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/a982ec3bb209ac51cdbbc90f00c1164b83b6aeeb"
+    },
+    {
+      "path": "src/s_scalbln.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8239db56247f3e344ac52d445018b6366eb5efae",
+      "size": 2136,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8239db56247f3e344ac52d445018b6366eb5efae"
+    },
+    {
+      "path": "src/s_scalbn.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc3a0cfdff2b1d003698497255a374691e4e8c9d",
+      "size": 2001,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/dc3a0cfdff2b1d003698497255a374691e4e8c9d"
+    },
+    {
+      "path": "src/s_signbit.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87f40f271dc0d1146441598907e3de6250c7839a",
+      "size": 1860,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/87f40f271dc0d1146441598907e3de6250c7839a"
+    },
+    {
+      "path": "src/s_signgam.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ad72a730420589e66055713e80501f8a73f3b5a7",
+      "size": 113,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/ad72a730420589e66055713e80501f8a73f3b5a7"
+    },
+    {
+      "path": "src/s_sin.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc0a5c6fd897aeae2ecd42d8900e9911e5309fab",
+      "size": 2330,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/cc0a5c6fd897aeae2ecd42d8900e9911e5309fab"
+    },
+    {
+      "path": "src/s_sincos.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8628235644aa8e996cbecd37f1b220a74d269a08",
+      "size": 4980,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/8628235644aa8e996cbecd37f1b220a74d269a08"
+    },
+    {
+      "path": "src/s_tan.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b234a2b8ab86e1c44474a208c8bce8b3c7bcfc0",
+      "size": 2170,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/2b234a2b8ab86e1c44474a208c8bce8b3c7bcfc0"
+    },
+    {
+      "path": "src/s_tanh.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1fa734d29c1c51993215422cbcf55ad4ec6cbd64",
+      "size": 2141,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/1fa734d29c1c51993215422cbcf55ad4ec6cbd64"
+    },
+    {
+      "path": "src/s_trunc.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c460cc925d9fd009ffe7ab62ffc53ca1001f9233",
+      "size": 1636,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/c460cc925d9fd009ffe7ab62ffc53ca1001f9233"
+    },
+    {
+      "path": "src/types-compat.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b20b5aeac2c0ba016eb6ded22115431d7af4e768",
+      "size": 264,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/b20b5aeac2c0ba016eb6ded22115431d7af4e768"
+    },
+    {
+      "path": "src/w_cabs.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6dc9bdee705357b00df5c32cdf0039f9e60201cc",
+      "size": 498,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/6dc9bdee705357b00df5c32cdf0039f9e60201cc"
+    },
+    {
+      "path": "src/s_modf.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3b517b588a6e4ce9caf0d3e20634464b8642707",
+      "size": 1897,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/e3b517b588a6e4ce9caf0d3e20634464b8642707"
+    },
+    {
+      "path": "src/s_ceil.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c70a9761c59dec4197acc27acd23c9ed9916a77",
+      "size": 1866,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/9c70a9761c59dec4197acc27acd23c9ed9916a77"
+    },
+    {
+      "path": "src/s_erf.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67068c4ce65bde75691daeecd3540a505b740802",
+      "size": 11311,
+      "url": "https://api.github.com/repos/JuliaMath/openlibm/git/blobs/67068c4ce65bde75691daeecd3540a505b740802"
+    }
+  ]
+}

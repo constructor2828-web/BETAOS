@@ -1,0 +1,158 @@
+{
+  "upstream": "https://github.com/bellard/quickjs",
+  "commit": "092277ac1eb2997916a8ad0c4fbf961c91180498",
+  "files": [
+    {
+      "path": "Changelog",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f5c536b19ea4be58a12070c8917586a543561bf6",
+      "size": 6231,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/f5c536b19ea4be58a12070c8917586a543561bf6"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2cf449dd3eea4291da7470bd322211b61981ccd8",
+      "size": 1130,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/2cf449dd3eea4291da7470bd322211b61981ccd8"
+    },
+    {
+      "path": "VERSION",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba2d8bcded0796651a9a8e49b94bef882c0a3251",
+      "size": 11,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/ba2d8bcded0796651a9a8e49b94bef882c0a3251"
+    },
+    {
+      "path": "cutils.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a3aeca454bd60e4f79f2bfc39415c08f3dbb341",
+      "size": 17798,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/6a3aeca454bd60e4f79f2bfc39415c08f3dbb341"
+    },
+    {
+      "path": "cutils.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "094a8f124119ea179e3fe34586929a35402cf914",
+      "size": 11162,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/094a8f124119ea179e3fe34586929a35402cf914"
+    },
+    {
+      "path": "dtoa.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac1be8d8e1a49a5f088acc1f74728f172e74a447",
+      "size": 44875,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/ac1be8d8e1a49a5f088acc1f74728f172e74a447"
+    },
+    {
+      "path": "dtoa.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de76f1a3feb6028c9c662933a41fe270cec02d3b",
+      "size": 3306,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/de76f1a3feb6028c9c662933a41fe270cec02d3b"
+    },
+    {
+      "path": "libregexp-opcode.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3d7b6fdf3a574004fe5e586d1f246b088bcbc07",
+      "size": 2887,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/b3d7b6fdf3a574004fe5e586d1f246b088bcbc07"
+    },
+    {
+      "path": "libregexp.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b231e95343ed2fde6062297420cc2cae0f4f5dd7",
+      "size": 113231,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/b231e95343ed2fde6062297420cc2cae0f4f5dd7"
+    },
+    {
+      "path": "libregexp.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0905bcb7973bd1ebbe883fabb449267dc7997a72",
+      "size": 2737,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/0905bcb7973bd1ebbe883fabb449267dc7997a72"
+    },
+    {
+      "path": "libunicode-table.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bda11f5f6f7268efe7cbff8322cc59ec12ae65de",
+      "size": 252686,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/bda11f5f6f7268efe7cbff8322cc59ec12ae65de"
+    },
+    {
+      "path": "libunicode.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70475f5a5581dbd7798c215fbd286547ebe73985",
+      "size": 63844,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/70475f5a5581dbd7798c215fbd286547ebe73985"
+    },
+    {
+      "path": "libunicode.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be2f3cc2f03cb48fc1e942f5094266f5a4d54cdd",
+      "size": 6047,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/be2f3cc2f03cb48fc1e942f5094266f5a4d54cdd"
+    },
+    {
+      "path": "list.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "809831115feffd2d879e679c3adfdf242eab74bb",
+      "size": 3089,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/809831115feffd2d879e679c3adfdf242eab74bb"
+    },
+    {
+      "path": "quickjs-atom.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea461ae5e73e898cd26d666b97f7cb29aba96162",
+      "size": 8632,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/ea461ae5e73e898cd26d666b97f7cb29aba96162"
+    },
+    {
+      "path": "quickjs-opcode.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ac1036dd37bd752dbe219c96fe77e70098277c2",
+      "size": 16061,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/8ac1036dd37bd752dbe219c96fe77e70098277c2"
+    },
+    {
+      "path": "quickjs.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "737cfebc2aa455ba20025face15fc8f90cfd553c",
+      "size": 2187363,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/737cfebc2aa455ba20025face15fc8f90cfd553c"
+    },
+    {
+      "path": "quickjs.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3fc629dcf4af552bbf4c6189c20c45164feb01a",
+      "size": 52821,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/e3fc629dcf4af552bbf4c6189c20c45164feb01a"
+    },
+    {
+      "path": "unicode_gen_def.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a78662162d0e4b5bbe5356d3a89407b96acaa844",
+      "size": 7784,
+      "url": "https://api.github.com/repos/bellard/quickjs/git/blobs/a78662162d0e4b5bbe5356d3a89407b96acaa844"
+    }
+  ]
+}

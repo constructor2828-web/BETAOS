@@ -1,0 +1,27 @@
+{
+  "upstream": "https://github.com/nothings/stb",
+  "commit": "4e9b368bfc071e97206ea5c6adba68dd0cbf8897",
+  "files": [
+    {
+      "path": "deprecated/stb_sprintf.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e3f170cc77aebdd5e62cdfc558c3c5a12115035",
+      "size": 58413,
+      "url": "https://api.github.com/repos/nothings/stb/git/blobs/5e3f170cc77aebdd5e62cdfc558c3c5a12115035"
+    },
+    {
+      "path": "stb_truetype.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90a5c2e2b3fe563c98585294ca7a949876aec94c",
+      "size": 199192,
+      "url": "https://api.github.com/repos/nothings/stb/git/blobs/90a5c2e2b3fe563c98585294ca7a949876aec94c"
+    },
+    {
+      "path": "stb_image.h",
+      "sha": "8378132ebe3544a0e3ed1ad473b6e5f09432c96c",
+      "size": 283011
+    }
+  ]
+}
