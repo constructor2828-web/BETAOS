@@ -3,7 +3,7 @@ __pycache__/
 
 disks/*.img
 
-# Local agent/account state must never enter a public source archive.
+#No ia cache here
 .agents/
 .codex/
 .aws/
